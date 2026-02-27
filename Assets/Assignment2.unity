@@ -191,7 +191,7 @@ MonoBehaviour:
   Orbits:
     Top:
       Radius: 2
-      Height: 2.43
+      Height: 2.74
     Center:
       Radius: 4
       Height: 0.98
@@ -201,7 +201,7 @@ MonoBehaviour:
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 0
+    Value: -4.8
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -211,7 +211,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 17.5
+    Value: 11.14
     Center: 17.5
     Range: {x: -10, y: 45}
     Wrap: 0
@@ -254,7 +254,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 75
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -281,8 +281,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 287029887}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11984489, y: -4.422114e-16, z: 5.1692406e-17, w: 0.99279267}
-  m_LocalPosition: {x: 0, y: 3.38, z: -4}
+  m_LocalRotation: {x: 0.055585172, y: -0.041810792, z: 0.0023297074, w: 0.99757546}
+  m_LocalPosition: {x: 0.3285709, y: 2.4559472, z: -4.122846}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -381,7 +381,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 60.000004
+  field of view: 75
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -407,8 +407,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584866000}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11984491, y: -4.4241838e-16, z: 5.3406513e-17, w: 0.99279267}
-  m_LocalPosition: {x: 0, y: 3.38, z: -4}
+  m_LocalRotation: {x: 0.055585176, y: -0.041810792, z: 0.0023297085, w: 0.99757546}
+  m_LocalPosition: {x: 0.3285709, y: 2.4559472, z: -4.122846}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -804,9 +804,9 @@ GameObject:
   - component: {fileID: 1417539666}
   - component: {fileID: 1417539665}
   - component: {fileID: 1417539664}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -935,7 +935,7 @@ Transform:
   m_GameObject: {fileID: 1468510727}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.617, z: -0.21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -963,13 +963,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2
+  m_Height: 2.5
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 1.35, z: 0}
 --- !u!114 &1468510730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,12 +983,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   playerCamera: {fileID: 584866003}
-  moveSpeed: 2
+  moveSpeed: 4
   rotationSpeed: 10
-  gravity: 0
+  gravity: -9.8
   jumpVelocity: 10
-  groundCheckOffset: {x: 0, y: 0.23, z: 0}
-  groundCheckDistance: 0.2
+  groundCheckOffset: {x: 0, y: 0.5, z: 0}
+  groundCheckDistance: 0.49
   groundCheckRadius: 0.2
   groundLayer:
     serializedVersion: 2
@@ -1035,6 +1035,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a254f038837f204e9e7b0ee86229e36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseBehaviour
+  gameCamera: {fileID: 287029889}
+  cameraSensitivity: 0.2
 --- !u!114 &1468510733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,7 +1049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aca2b7442a328b40ab1ddc67162e48b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimator
-  playerController: {fileID: 0}
+  playerController: {fileID: 1468510730}
   anim: {fileID: 2105633206}
 --- !u!1 &1781884716
 GameObject:

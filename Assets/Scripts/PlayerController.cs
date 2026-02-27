@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
     {
         _moveInput = value.Get<Vector2>();
     }
-
+    
     public void OnJump()
     {
         if(_isGrounded)
@@ -95,9 +95,6 @@ public class PlayerController : MonoBehaviour
         //Calculate gravity
         _velocity = Vector3.up * _velocity.y + _moveDirection * moveSpeed;
         _velocity.y += gravity * Time.deltaTime;
-
-        
-        
     }
 
     private void CheckGrounded()
