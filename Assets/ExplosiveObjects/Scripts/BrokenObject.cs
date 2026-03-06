@@ -8,12 +8,7 @@ namespace ExpObj
         [SerializeField] GameObject[] pieces;
         [SerializeField] float velMultiplier = 2f;
         [SerializeField] float timeBeforeDestroying = 60f;
-
-        void OnEnable()
-        {
-            Destroy(gameObject, timeBeforeDestroying);
-        }
-
+        
         public void RandomVelocities()
         {
             for (int i = 0; i <= pieces.Length - 1; i++)
@@ -24,6 +19,8 @@ namespace ExpObj
                 Vector3 vel = new Vector3(velMultiplier * xVel, velMultiplier * yVel, velMultiplier * zVel);
                 pieces[i].GetComponent<Rigidbody>().linearVelocity = vel;
             }
+            
+            Destroy(gameObject, timeBeforeDestroying);
         }
     }
 }

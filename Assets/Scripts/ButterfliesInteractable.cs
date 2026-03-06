@@ -1,8 +1,26 @@
 using UnityEngine;
 
-public class Target : MonoBehaviour
+public class ButterfliesInteractable : MonoBehaviour, IInteractable
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+
+    public void OnHoverIn()
+    {
+        
+    }
+
+    public void OnInteract()
+    {
+        
+    }
+
+    public void OnHoverOff()
+    {
+        
+    }
+
+
     void Start()
     {
         

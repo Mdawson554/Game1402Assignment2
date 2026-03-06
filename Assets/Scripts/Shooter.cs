@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,12 +8,11 @@ public class Shooter : MonoBehaviour
     [SerializeField] private Transform shootPoint;
     [SerializeField] private GameObject shootObject;
     [SerializeField] private float shootForce;
-    [SerializeField] private float arrowDestroyTime;
-    private GameObject _arrow;
+    [SerializeField] private float reloadSpeed;
     
+    private GameObject _arrow;
     private bool canShoot = true;
     
-
     void OnEnable()
     {
         shootInput.Enable();
@@ -43,10 +39,7 @@ public class Shooter : MonoBehaviour
 
     private IEnumerator DestroyArrow()
     {
-        {
-            yield return new WaitForSeconds(arrowDestroyTime);
-            Destroy(_arrow);
-        }
+        yield return new WaitForSeconds(reloadSpeed);
         canShoot =  true;
         yield return  null;
     }

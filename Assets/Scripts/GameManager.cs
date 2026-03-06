@@ -5,7 +5,11 @@ public class GameManager : MonoBehaviour
     public GameObject PauseMenu;
     public bool ispaused;
     
+    [SerializeField] private int MaxButterfliesCount;
     [SerializeField] public GameObject PauseButton;
+    
+    private int currentButterflies;
+    private bool IsGameOver;
     
     public void Pause()
     {
