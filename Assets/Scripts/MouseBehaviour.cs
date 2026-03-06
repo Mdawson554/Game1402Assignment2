@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class MouseBehaviour : MonoBehaviour
 {
-    [SerializeField] private CinemachineOrbitalFollow gameCamera;
+    public CinemachineOrbitalFollow GameCamera;
     [SerializeField] private float cameraSensitivity;
 
     private float _horizontalMinCameraRange;
@@ -20,11 +20,11 @@ public class MouseBehaviour : MonoBehaviour
     void Start()
     {
         ShowMouse(false);
-        _horizontalMinCameraRange = gameCamera.HorizontalAxis.Range.x;
-        _horizonatalMaxCamerRange = gameCamera.HorizontalAxis.Range.y;
+        _horizontalMinCameraRange = GameCamera.HorizontalAxis.Range.x;
+        _horizonatalMaxCamerRange = GameCamera.HorizontalAxis.Range.y;
         
-        _verticalMinCameraRange =  gameCamera.VerticalAxis.Range.x;
-        _verticalMaxCameraRange = gameCamera.VerticalAxis.Range.y;
+        _verticalMinCameraRange =  GameCamera.VerticalAxis.Range.x;
+        _verticalMaxCameraRange = GameCamera.VerticalAxis.Range.y;
     }
 
     void Update()
@@ -45,14 +45,11 @@ public class MouseBehaviour : MonoBehaviour
     
     public void CalculateCamera()
     {
-        gameCamera.HorizontalAxis.Value += _mouseInput.x *  cameraSensitivity; 
-        gameCamera.VerticalAxis.Value += _mouseInput.y *  cameraSensitivity;
+        GameCamera.HorizontalAxis.Value += _mouseInput.x *  cameraSensitivity; 
+        GameCamera.VerticalAxis.Value += _mouseInput.y *  cameraSensitivity;
         
-        gameCamera.HorizontalAxis.Value = Mathf.Clamp(gameCamera.HorizontalAxis.Value, _horizontalMinCameraRange, _horizonatalMaxCamerRange);
-        gameCamera.VerticalAxis.Value = Mathf.Clamp(gameCamera.VerticalAxis.Value, _verticalMinCameraRange, _verticalMaxCameraRange);
-        
-        //Debug.Log(_mouseInput.x);
-        //Debug.Log(_mouseInput.y);
+        GameCamera.HorizontalAxis.Value = Mathf.Clamp(GameCamera.HorizontalAxis.Value, _horizontalMinCameraRange, _horizonatalMaxCamerRange);
+        GameCamera.VerticalAxis.Value = Mathf.Clamp(GameCamera.VerticalAxis.Value, _verticalMinCameraRange, _verticalMaxCameraRange);
     }
     
 }

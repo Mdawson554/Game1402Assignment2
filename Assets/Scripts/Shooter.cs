@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,16 +12,16 @@ public class Shooter : MonoBehaviour
     [SerializeField] private GameObject shootObject;
     [SerializeField] private float shootForce;
     [SerializeField] private float reloadSpeed;
-    [SerializeField] private GameObject shooterCamera;
-    [SerializeField] private GameObject orbitalCamera;
-    private GameObject _arrow;
+    [SerializeField] private CinemachineCamera aimCamera;
+    [SerializeField] private CinemachineOrbitalFollow orbitalCamera;
+    [SerializeField]private MouseBehaviour mouseBehaviour;
     
     private bool canShoot = true;
-    
+    private GameObject _arrow;
     void OnEnable()
     {
         shootInput.Enable();
-        shootInput.canceled += Shoot;
+        shootInput.performed += Shoot;
         
         aimInput.Enable();
         aimInput.performed += AimWeapon;
@@ -28,7 +29,7 @@ public class Shooter : MonoBehaviour
 
     void OnDisable()
     {
-        shootInput.canceled -= Shoot;
+        shootInput.performed -= Shoot;
         aimInput.performed -= AimWeapon;
     }
 
@@ -43,15 +44,16 @@ public class Shooter : MonoBehaviour
             _arrow.GetComponent<Rigidbody>().AddForce(shootForce * shootPoint.forward);
         }
         canShoot = false;
+        StartCoroutine(Reload());
     }
 
     private void AimWeapon(InputAction.CallbackContext context)
     {
-       shooterCamera.SetActive(true);
-       orbitalCamera.SetActive(false);
+       aimCamera.gameObject.SetActive(true);
+       orbitalCamera.gameObject.SetActive(false);
     }
 
-    private IEnumerator DestroyArrow()
+    private IEnumerator Reload()
     {
         yield return new WaitForSeconds(reloadSpeed);
         canShoot =  true;
@@ -60,6 +62,6 @@ public class Shooter : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        StartCoroutine(DestroyArrow());
+        
     }
 }
