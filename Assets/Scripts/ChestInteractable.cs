@@ -45,8 +45,6 @@ public class ChestInteractable : MonoBehaviour, IInteractable
         {
             Destroy(gameObject);
         });
-
-        
     }
 
     void OnDestroy()
