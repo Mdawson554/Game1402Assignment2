@@ -4,7 +4,6 @@ using UnityEngine;
 public class Toast : MonoBehaviour
 {
     public static Toast Instance;
-
     [SerializeField] private GameObject toastUI;
     [SerializeField] private TMPro.TextMeshProUGUI toastText;
     
@@ -15,7 +14,6 @@ public class Toast : MonoBehaviour
         {
             Destroy(this);
         }
-
         Instance = this;
     }
     void Start()

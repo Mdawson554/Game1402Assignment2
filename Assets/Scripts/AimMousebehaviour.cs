@@ -9,7 +9,6 @@ public class AimMousebehaviour : MonoBehaviour
     
     [SerializeField] private float _horizonatalMaxCamerRange = 50f;
     [SerializeField] private float _horizontalMinCameraRange = 50f;
-    
     [SerializeField] private float _verticalMinCameraRange = 50f;
     [SerializeField] private float _verticalMaxCameraRange = 50f;
 
@@ -41,8 +40,9 @@ public class AimMousebehaviour : MonoBehaviour
     
     public void CalculateCamera()
     {
-        xRot += _mouseInput.y * cameraSensitivity * Time.deltaTime;
-        yRot += _mouseInput.x * cameraSensitivity * Time.deltaTime;
+        yRot += _mouseInput.y * cameraSensitivity * Time.deltaTime;
+        xRot += _mouseInput.x * cameraSensitivity * Time.deltaTime;
+        
         yRot = Mathf.Clamp(yRot, -_horizontalMinCameraRange, _horizonatalMaxCamerRange);
         xRot = Mathf.Clamp(xRot, -_verticalMinCameraRange, _verticalMaxCameraRange);
         var vector = new Vector3(xRot, yRot, aimCamera.transform.rotation.z);

@@ -32,7 +32,6 @@ public class PlayerInteractor : MonoBehaviour
             _interactable = _tempInteractable;
             _interactable?.OnHoverIn();
         }
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -50,7 +49,6 @@ public class PlayerInteractor : MonoBehaviour
     // to do: add binding for OnPause in the InputActions!!!
     void OnPause(InputAction.CallbackContext context) 
     {
-        Debug.unityLogger.Log("Game Pause");
-        gameManager.Pause();
+        Debug.Log("Game Pause");
     }
 }

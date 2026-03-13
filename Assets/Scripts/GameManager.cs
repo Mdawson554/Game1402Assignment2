@@ -1,29 +1,74 @@
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public string SceneName;
+    public static GameManager Instance;
+    
+    [SerializeField] public int MaxButterflies;
+    [SerializeField] public int MaxArrows;
+    [SerializeField] private TMP_Text arrowText;
+    [SerializeField] private Button playButton;
+    
+    public int CurrentArrows;
+    public int CurrentButterflies;
     public GameObject PauseMenu;
-    public bool ispaused;
+    public GameObject GameUI;
     
-    [SerializeField] private int MaxButterfliesCount;
-    [SerializeField] public GameObject PauseButton;
+    private bool ispaused;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        Instance = this;
+    }
     
-    private int currentButterflies;
-    private bool IsGameOver;
+    public void CollectButterflies(int butterflyGain)
+    {
+        CurrentButterflies = Mathf.Clamp(CurrentButterflies + butterflyGain, 0, MaxButterflies);
+    }
+
+    public void WinFunction()
+    {
+        if (CurrentButterflies != MaxButterflies) return;
+        SceneManager.LoadScene(SceneName);
+    }
     
-    public void Pause()
+    public void AddArrowsToInventory() 
+    {
+        CurrentArrows = MaxArrows;
+        arrowText.text = CurrentArrows.ToString();
+    }
+
+    public void ShootArrow()
+    {
+        CurrentArrows = CurrentArrows - 1;
+        arrowText.text = CurrentArrows.ToString();
+    }
+    
+    public void Pause(InputAction.CallbackContext context)
     {
         if (ispaused) 
         {
             ispaused = false;
             Time.timeScale = 1;
-            PauseMenu.SetActive(false); //makes sure that the pause menu doesn't sit over the screen despite gameplay continuing
+            PauseMenu.SetActive(false);
+            //enable the mouse behaviour
         }
         else
         {
             ispaused = true;
-            Time.timeScale = 0; //most importnant part here is the time scale!!!!!
-            PauseMenu.SetActive(true); //enables the pause menu screen to overlay
+            Time.timeScale = 0; 
+            PauseMenu.SetActive(true); 
+            //disable the mouse behaviour
         }
     }
 }
