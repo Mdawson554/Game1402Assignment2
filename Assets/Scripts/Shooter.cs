@@ -11,14 +11,18 @@ public class Shooter : MonoBehaviour
     [SerializeField] private GameObject shootObject;
     [SerializeField] private float shootForce;
     [SerializeField] private float reloadSpeed;
-    [SerializeField] private CinemachineCamera aimCamera;
+    [SerializeField] private Transform aimCamera;
     [SerializeField] private CinemachineOrbitalFollow orbitalCamera;
     [SerializeField]private MouseBehaviour mouseBehaviour;
     
+    private PlayerController _playerController;
     private bool canShoot = true;
     private GameObject _arrow;
+    private bool _isAiming = false;
     void OnEnable()
     {
+        if(_playerController == null)
+            _playerController = GetComponent<PlayerController>();
         shootInput.Enable();
         shootInput.performed += Shoot;
         
@@ -50,8 +54,10 @@ public class Shooter : MonoBehaviour
 
     private void AimWeapon(InputAction.CallbackContext context)
     {
-      // aimCamera.gameObject.SetActive(true);
-       //orbitalCamera.gameObject.SetActive(false);
+        _isAiming = !_isAiming;
+        _playerController.IsAiming = _isAiming;
+       aimCamera.gameObject.SetActive(_isAiming);
+       orbitalCamera.gameObject.SetActive(!_isAiming);
     }
 
     private IEnumerator Reload()

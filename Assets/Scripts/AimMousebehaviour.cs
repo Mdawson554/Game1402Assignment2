@@ -7,8 +7,6 @@ public class AimMousebehaviour : MonoBehaviour
     [SerializeField] private float cameraSensitivity;
     [SerializeField] private GameObject aimCamera;
     
-    [SerializeField] private float _horizonatalMaxCamerRange = 50f;
-    [SerializeField] private float _horizontalMinCameraRange = 50f;
     [SerializeField] private float _verticalMinCameraRange = 50f;
     [SerializeField] private float _verticalMaxCameraRange = 50f;
 
@@ -16,7 +14,7 @@ public class AimMousebehaviour : MonoBehaviour
     private float yRot;
     
     private Vector2 _mouseInput;
-    
+    private PlayerController _player;
     void Update()
     {
         CalculateCamera();
@@ -24,6 +22,7 @@ public class AimMousebehaviour : MonoBehaviour
     
     void Start()
     {
+        _player = GetComponent<PlayerController>();
         ShowMouse(false);
     }
     
@@ -40,13 +39,16 @@ public class AimMousebehaviour : MonoBehaviour
     
     public void CalculateCamera()
     {
-        yRot += _mouseInput.y * cameraSensitivity * Time.deltaTime;
-        xRot += _mouseInput.x * cameraSensitivity * Time.deltaTime;
+        if(!_player.IsAiming) return;
         
-        yRot = Mathf.Clamp(yRot, -_horizontalMinCameraRange, _horizonatalMaxCamerRange);
+        Debug.Log($"Looking at {_mouseInput.x}, {_mouseInput.y}");
+        yRot += _mouseInput.x * cameraSensitivity * Time.deltaTime;
+        xRot += _mouseInput.y * cameraSensitivity * Time.deltaTime;
+        
         xRot = Mathf.Clamp(xRot, -_verticalMinCameraRange, _verticalMaxCameraRange);
-        var vector = new Vector3(xRot, yRot, aimCamera.transform.rotation.z);
-        // aimCamera.transform.eulerAngles = vector;
+        var vector = new Vector3(-xRot, 0, 0);
         aimCamera.transform.eulerAngles = vector;
+       var rotation = new Vector3(0,-yRot, 0);
+       transform.eulerAngles = rotation;
     }
 }

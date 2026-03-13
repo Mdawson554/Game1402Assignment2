@@ -7,7 +7,7 @@ public class ArrowTarget : MonoBehaviour
     [SerializeField] Transform butterflySpawnPoint;
    
    public void DestroyTarget()
-   {  
+   { 
        Spawnbutterflies();
       GetComponent<ExplosiveObject>().Explode();
       GetComponent<BrokenObject>().RandomVelocities();

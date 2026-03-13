@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private Quaternion _targetRotation;
     private Vector3 _velocity;
     private bool _isGrounded;
+    public bool IsAiming;
 
     public bool IsGrounded()
     {
@@ -86,7 +87,7 @@ public class PlayerController : MonoBehaviour
 
         _moveDirection = _camRight * _moveInput.x + _camForward * _moveInput.y;
 
-        if(_moveDirection.sqrMagnitude > 0.01f)
+        if(_moveDirection.sqrMagnitude > 0.01f && !IsAiming)
         {
             _targetRotation = Quaternion.LookRotation(_moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, rotationSpeed * Time.deltaTime);

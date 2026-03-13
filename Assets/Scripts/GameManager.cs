@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] public int MaxButterflies;
     [SerializeField] public int MaxArrows;
-    [SerializeField] private TMP_Text arrowText;
+    [SerializeField] private TextMeshProUGUI arrowText;
+    [SerializeField] private TextMeshProUGUI butterflyText;
     [SerializeField] private Button playButton;
     
     public int CurrentArrows;
@@ -33,13 +34,9 @@ public class GameManager : MonoBehaviour
     
     public void CollectButterflies(int butterflyGain)
     {
-        CurrentButterflies = Mathf.Clamp(CurrentButterflies + butterflyGain, 0, MaxButterflies);
-    }
-
-    public void WinFunction()
-    {
-        if (CurrentButterflies != MaxButterflies) return;
-        SceneManager.LoadScene(SceneName);
+        CurrentButterflies =+ butterflyGain;
+        butterflyText.text = CurrentButterflies.ToString();
+        WinFunction();
     }
     
     public void AddArrowsToInventory() 
@@ -70,5 +67,11 @@ public class GameManager : MonoBehaviour
             PauseMenu.SetActive(true); 
             //disable the mouse behaviour
         }
+    }
+    
+    public void WinFunction()
+    {
+        if (CurrentButterflies < MaxButterflies) return;
+        SceneManager.LoadScene(SceneName);
     }
 }
