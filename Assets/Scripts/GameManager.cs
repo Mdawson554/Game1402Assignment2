@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 {
     public string SceneName;
     public static GameManager Instance;
+    private AudioManager audioManager;
     
     [SerializeField] public int MaxButterflies;
     [SerializeField] public int MaxArrows;
@@ -31,7 +32,13 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
     }
-    
+
+    private void Start()
+    { 
+        audioManager = AudioManager.Instance;
+       audioManager.PlayBGMusic();
+    }
+
     public void CollectButterflies(int butterflyGain)
     {
         CurrentButterflies =+ butterflyGain;
