@@ -9,8 +9,6 @@ public class PlayerInteractor : MonoBehaviour
 
     private IInteractable _interactable;
     private IInteractable _tempInteractable;
-    
-    public GameManager gameManager;
 
     void OnEnable()
     {
@@ -46,9 +44,4 @@ public class PlayerInteractor : MonoBehaviour
         _interactable?.OnInteract();
     }
     
-    // to do: add binding for OnPause in the InputActions!!!
-    void OnPause(InputAction.CallbackContext context) 
-    {
-        Debug.Log("Game Pause");
-    }
 }

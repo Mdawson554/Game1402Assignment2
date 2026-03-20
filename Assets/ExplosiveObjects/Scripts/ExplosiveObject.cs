@@ -27,6 +27,8 @@ namespace ExpObj
             newSFX.GetComponent<AudioSource>().clip = explosionClips[Random.Range(0, explosionClips.Length)];
             float randomPitch = 1 + Random.Range(-pitchVariationRange, pitchVariationRange);
             newSFX.GetComponent<AudioSource>().pitch = randomPitch;
+            
+            //AudioManager.Instance.PlaySound(explosionClips[0]);
 
             // vfx
             newVFX = Instantiate(explosionVFX, transform.position, Quaternion.identity);

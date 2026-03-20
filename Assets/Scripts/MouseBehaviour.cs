@@ -4,22 +4,34 @@ using UnityEngine.InputSystem;
 
 public class MouseBehaviour : MonoBehaviour
 {
-    public CinemachineOrbitalFollow GameCamera;
     [SerializeField] private float cameraSensitivity;
-
+    public CinemachineOrbitalFollow GameCamera;
     private float _horizontalMinCameraRange;
     private float _horizonatalMaxCamerRange;
-    
     private float _verticalMinCameraRange;
     private float _verticalMaxCameraRange;
-    
-    
     private Vector2 _mouseInput;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private PlayerController _playerController;
+    private PlayerState _currentState;
+
+    void OnEnable()
+    {
+        _playerController = GetComponent<PlayerController>();
+        _playerController.OnStateUpdated += StateUpdate;
+    }
+
+    void OnDisable()
+    {
+        _playerController.OnStateUpdated -= StateUpdate;
+    }
+    void StateUpdate(PlayerState state)
+    {
+        _currentState = state;
+    }
+    
     void Start()
     {
-        ShowMouse(false);
         _horizontalMinCameraRange = GameCamera.HorizontalAxis.Range.x;
         _horizonatalMaxCamerRange = GameCamera.HorizontalAxis.Range.y;
         
@@ -29,14 +41,11 @@ public class MouseBehaviour : MonoBehaviour
 
     void Update()
     {
-        CalculateCamera();
+        if (_currentState == PlayerState.EXPLORE)
+        {
+            CalculateCamera();
+        }
     } 
-
-    public void ShowMouse(bool value)
-    {
-        Cursor.visible = value;
-        Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
-    }
     
     public void OnLook(InputValue value)
     {
@@ -45,8 +54,8 @@ public class MouseBehaviour : MonoBehaviour
     
     public void CalculateCamera()
     {
-        GameCamera.HorizontalAxis.Value += _mouseInput.x *  cameraSensitivity; 
-        GameCamera.VerticalAxis.Value += _mouseInput.y *  cameraSensitivity;
+        GameCamera.HorizontalAxis.Value += _mouseInput.x *  cameraSensitivity * Time.deltaTime; 
+        GameCamera.VerticalAxis.Value += _mouseInput.y *  cameraSensitivity  * Time.deltaTime;
         
         GameCamera.HorizontalAxis.Value = Mathf.Clamp(GameCamera.HorizontalAxis.Value, _horizontalMinCameraRange, _horizonatalMaxCamerRange);
         GameCamera.VerticalAxis.Value = Mathf.Clamp(GameCamera.VerticalAxis.Value, _verticalMinCameraRange, _verticalMaxCameraRange);

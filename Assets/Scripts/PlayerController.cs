@@ -41,8 +41,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 _defaultAimTrackerPosition;
     private Vector3 _tempAimTrackerPosition;
 
-    public bool IsAiming;
-
     private PlayerState _currentState;
 
     public bool IsGrounded()
@@ -59,7 +57,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
-
         //set the default state
         _currentState = PlayerState.EXPLORE;
         OnStateUpdated?.Invoke(_currentState);
@@ -80,8 +77,6 @@ public class PlayerController : MonoBehaviour
             CalculateMovementAim();
             UpdateAimTrack();
         }
-
-
         _characterController.Move(_velocity * Time.deltaTime);
     }
 
@@ -124,8 +119,12 @@ public class PlayerController : MonoBehaviour
             _camForward.Normalize();
             transform.rotation = Quaternion.LookRotation(_camForward);
         }
-
         OnStateUpdated?.Invoke(_currentState);
+    }
+
+    public void OnPause(InputValue value)
+    {
+        GameManager.Instance.Pause();
     }
 
     private void CalculateMovementExplore()

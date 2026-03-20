@@ -3,27 +3,34 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEditor;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public string SceneName;
+    [SerializeField] private string SceneName;
     public static GameManager Instance;
     private AudioManager audioManager;
     
-    [SerializeField] public int MaxButterflies;
-    [SerializeField] public int MaxArrows;
+    [SerializeField] private int maxtime;
+    [SerializeField] private int maxButterflies;
+    [SerializeField] private int maxArrows;
     [SerializeField] private TextMeshProUGUI arrowText;
     [SerializeField] private TextMeshProUGUI butterflyText;
-    [SerializeField] private Button playButton;
+    [SerializeField] private TextMeshProUGUI timerText;
     
+    [SerializeField] private Button resumeButton;
+    [SerializeField] private Button quitButton;
+
+    public float currentTime;
     public int CurrentArrows;
     public int CurrentButterflies;
     public GameObject PauseMenu;
+    public GameObject WinScreeen;
+    public GameObject LooseScreen;
+    
     public GameObject GameUI;
     
-    private bool ispaused;
-
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -32,11 +39,30 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
     }
-
+    
     private void Start()
     { 
+        currentTime = maxtime;
+        ShowMouse(false);
         audioManager = AudioManager.Instance;
        audioManager.PlayBGMusic();
+    }
+    
+   private void Update()
+    {
+        DecreaseTimerTime();
+    }
+   
+    private void DecreaseTimerTime()
+    {
+        if (currentTime <= 0)
+        {
+            LooseFunction();
+        }
+        currentTime -= Time.deltaTime;
+        float minutes = Mathf.FloorToInt(currentTime / 60);
+        float seconds = Mathf.FloorToInt(currentTime % 60);
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     public void CollectButterflies(int butterflyGain)
@@ -48,7 +74,7 @@ public class GameManager : MonoBehaviour
     
     public void AddArrowsToInventory() 
     {
-        CurrentArrows = MaxArrows;
+        CurrentArrows = maxArrows;
         arrowText.text = CurrentArrows.ToString();
     }
 
@@ -58,27 +84,60 @@ public class GameManager : MonoBehaviour
         arrowText.text = CurrentArrows.ToString();
     }
     
-    public void Pause(InputAction.CallbackContext context)
+    public void ShowMouse(bool value)
     {
-        if (ispaused) 
-        {
-            ispaused = false;
-            Time.timeScale = 1;
-            PauseMenu.SetActive(false);
-            //enable the mouse behaviour
-        }
-        else
-        {
-            ispaused = true;
-            Time.timeScale = 0; 
-            PauseMenu.SetActive(true); 
-            //disable the mouse behaviour
-        }
+        Cursor.visible = value;
+        Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
+    }
+    
+    void OnEnable()
+    {
+        resumeButton.onClick.AddListener(OnResume);
+        quitButton.onClick.AddListener(OnQuit);
+    }
+
+    void OnDisable()
+    {
+        resumeButton.onClick.RemoveListener(OnResume);
+        quitButton.onClick.RemoveListener(OnQuit);
+    }
+    
+    public void Pause()
+    {
+        ShowMouse(true);
+        Time.timeScale = 0; 
+        PauseMenu.SetActive(true); 
+    }
+    
+    public void OnResume()
+    {
+        ShowMouse(false);
+        Time.timeScale = 1;
+        PauseMenu.SetActive(false);
+    }
+
+    public void OnQuit()
+    {
+        #if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+        #endif
+        Application.Quit();
     }
     
     public void WinFunction()
     {
-        if (CurrentButterflies < MaxButterflies) return;
-        SceneManager.LoadScene(SceneName);
+        if (CurrentButterflies < maxButterflies && currentTime > 0)
+        {
+            WinScreeen.SetActive(true);
+            ShowMouse(true);
+            Time.timeScale = 0; 
+        }
+    }
+
+    public void LooseFunction()
+    {
+            LooseScreen.SetActive(true);
+            ShowMouse(true);
+            Time.timeScale = 0; 
     }
 }

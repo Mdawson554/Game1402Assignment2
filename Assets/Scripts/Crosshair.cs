@@ -8,21 +8,23 @@ public class Crosshair : MonoBehaviour
     
     void OnEnable()
     {
-        //player.OnStateUpdated += StateUpdate;
+        player.OnStateUpdated += StateUpdate;
     }
 
     void OnDisable()
     {
-        //player.OnStateUpdated -= StateUpdate;
+        player.OnStateUpdated -= StateUpdate;
     }
-
-    private void Start()
-    {
     
-    }
-
-    private void StateUpdate()
+    private void StateUpdate(PlayerState newState)
     {
-        
+        if (newState == PlayerState.AIM)
+        {
+            CrosshairCanvas.gameObject.SetActive(true);
+        }
+        else
+        {
+            CrosshairCanvas.gameObject.SetActive(false);
+        }
     }
 }
