@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    
     public static GameManager Instance;
     private AudioManager audioManager;
     
@@ -103,6 +102,7 @@ public class GameManager : MonoBehaviour
     
     public void Pause()
     {
+        if (_gameOver) return;
         ShowMouse(true);
         Time.timeScale = 0; 
         pauseMenu.SetActive(true); 
@@ -110,6 +110,7 @@ public class GameManager : MonoBehaviour
     
     private void OnResume()
     {
+        if (_gameOver) return;
         ShowMouse(false);
         Time.timeScale = 1;
         pauseMenu.SetActive(false);
