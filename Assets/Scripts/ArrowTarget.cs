@@ -4,18 +4,17 @@ using UnityEngine;
 public class ArrowTarget : MonoBehaviour
 {
     [SerializeField] private ButterfliesInteractable butterflyPrefab;
-    [SerializeField] Transform butterflySpawnPoint;
+    [SerializeField] private Transform butterflySpawnPoint;
    
    public void DestroyTarget()
-   { 
-       Spawnbutterflies();
-      GetComponent<ExplosiveObject>().Explode();
-      GetComponent<BrokenObject>().RandomVelocities();
+   {
+       SpawnButterflies();
+       GetComponent<ExplosiveObject>().Explode();
+       GetComponent<BrokenObject>().RandomVelocities();
    }
    
-   public void Spawnbutterflies()
+   private void SpawnButterflies()
    {
-     ButterfliesInteractable butterfly =  Instantiate(butterflyPrefab);
-     butterfly.transform.position = transform.localPosition;
+       Instantiate(butterflyPrefab, butterflySpawnPoint.position, Quaternion.identity);
    }
 }

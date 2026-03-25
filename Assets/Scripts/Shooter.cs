@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,19 +8,17 @@ public class Shooter : MonoBehaviour
     [SerializeField] private Transform shootPoint;
     [SerializeField] private GameObject shootObject;
     [SerializeField] private float shootForce;
-    [SerializeField] private float reloadSpeed;
-    [SerializeField] private CinemachineOrbitalFollow orbitalCamera;
-    [SerializeField]private MouseBehaviour mouseBehaviour;
+    [SerializeField] private float reloadTime;
     [SerializeField] private AudioClip bowRelease;
     [SerializeField] private AudioClip bowLoading;
     [SerializeField] private Transform aimtrack;
     private PlayerController _playerController;
     private AudioManager audioManager;
-    private bool canShoot = true;
+    private bool _canShoot = true;
     private GameObject _arrow;
     private PlayerState _currentState;
     
-    void OnEnable()
+    private void OnEnable()
     {
         _playerController = GetComponent<PlayerController>();
         _playerController.OnStateUpdated += StateUpdate;
@@ -30,7 +26,7 @@ public class Shooter : MonoBehaviour
         shootInput.performed += Shoot;
     }
 
-    void StateUpdate(PlayerState state)
+    private void StateUpdate(PlayerState state)
     {
         _currentState = state;
     }
@@ -40,7 +36,7 @@ public class Shooter : MonoBehaviour
         audioManager = AudioManager.Instance;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         _playerController.OnStateUpdated -= StateUpdate;
         shootInput.performed -= Shoot;
@@ -52,27 +48,26 @@ public class Shooter : MonoBehaviour
         {
             return;
         }
-        else if (canShoot && GameManager.Instance.CurrentArrows > 0)
+        else if (_canShoot && GameManager.Instance.currentArrows > 0)
         {
             //calculate the direction
-            Vector3 _shootDirection = aimtrack.position - shootPoint.position;
+            Vector3 shootDirection = aimtrack.position - shootPoint.position;
             
             //create a new arrow
-            _arrow = Instantiate(shootObject, shootPoint.position, Quaternion.LookRotation(_shootDirection));
+            _arrow = Instantiate(shootObject, shootPoint.position, Quaternion.LookRotation(shootDirection));
 
             // apply a force
             audioManager.PlaySound(bowRelease);
-            _arrow.GetComponent<Rigidbody>().AddForce(shootForce * _shootDirection, ForceMode.Impulse);
+            _arrow.GetComponent<Rigidbody>().AddForce(shootForce * shootDirection, ForceMode.Impulse);
             GameManager.Instance.ShootArrow();
+            _canShoot = false;
+            StartCoroutine(Reload());
         }
-        canShoot = false;
-        StartCoroutine(Reload());
     }
 
     private IEnumerator Reload()
     {
-        yield return new WaitForSeconds(reloadSpeed);
-        canShoot =  true;
-        yield return  null;
+        yield return new WaitForSeconds(reloadTime);
+        _canShoot =  true;
     }
 }

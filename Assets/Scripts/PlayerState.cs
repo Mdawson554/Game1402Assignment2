@@ -1,5 +1,4 @@
-
-public enum PlayerState
+ public enum PlayerState
 {
     EXPLORE,
         

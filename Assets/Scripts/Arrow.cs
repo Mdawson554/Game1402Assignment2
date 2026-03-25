@@ -1,13 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
    [SerializeField] private float arrowDestroyTime;
+   private bool _isDestroying;
 
    private void OnCollisionEnter(Collision collision)
    {
+      if (_isDestroying) return;
+      _isDestroying = true;
+      
       if (collision.gameObject.GetComponent<ArrowTarget>())
       {
          Debug.Log("ArrowTarget destroyed");
@@ -20,6 +23,5 @@ public class Arrow : MonoBehaviour
    {
       yield return new WaitForSeconds(arrowDestroyTime);
       Destroy(gameObject);
-      yield return  null;
    }
 }

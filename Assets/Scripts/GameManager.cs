@@ -1,37 +1,34 @@
-using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 using TMPro;
 using UnityEditor;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private string SceneName;
+    
     public static GameManager Instance;
     private AudioManager audioManager;
     
-    [SerializeField] private int maxtime;
+    [SerializeField] private string sceneName;
+    [SerializeField] private int maxTime;
     [SerializeField] private int maxButterflies;
     [SerializeField] private int maxArrows;
+    [SerializeField] private int arrowPickupAmount;
     [SerializeField] private TextMeshProUGUI arrowText;
     [SerializeField] private TextMeshProUGUI butterflyText;
     [SerializeField] private TextMeshProUGUI timerText;
-    
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button quitButton;
 
     public float currentTime;
-    public int CurrentArrows;
-    public int CurrentButterflies;
-    public GameObject PauseMenu;
-    public GameObject WinScreeen;
-    public GameObject LooseScreen;
+    public int currentArrows;
+    public int currentButterflies;
+    private bool _gameOver = false;
+    public GameObject pauseMenu;
+    public GameObject winScreen;
+    public GameObject loseScreen;
     
-    public GameObject GameUI;
-    
-    void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -41,11 +38,11 @@ public class GameManager : MonoBehaviour
     }
     
     private void Start()
-    { 
-        currentTime = maxtime;
+    {
+        currentTime = maxTime;
         ShowMouse(false);
         audioManager = AudioManager.Instance;
-       audioManager.PlayBGMusic();
+        audioManager.PlayBGMusic();
     }
     
    private void Update()
@@ -55,11 +52,13 @@ public class GameManager : MonoBehaviour
    
     private void DecreaseTimerTime()
     {
+        currentTime -= Time.deltaTime;
         if (currentTime <= 0)
         {
-            LooseFunction();
+            currentTime = 0;
+            LoseFunction();
+            return;
         }
-        currentTime -= Time.deltaTime;
         float minutes = Mathf.FloorToInt(currentTime / 60);
         float seconds = Mathf.FloorToInt(currentTime % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
@@ -67,36 +66,36 @@ public class GameManager : MonoBehaviour
 
     public void CollectButterflies(int butterflyGain)
     {
-        CurrentButterflies =+ butterflyGain;
-        butterflyText.text = CurrentButterflies.ToString();
+        currentButterflies += butterflyGain;
+        butterflyText.text = currentButterflies.ToString();
         WinFunction();
     }
     
     public void AddArrowsToInventory() 
     {
-        CurrentArrows = maxArrows;
-        arrowText.text = CurrentArrows.ToString();
+        currentArrows = Mathf.Min(currentArrows + arrowPickupAmount, maxArrows);
+        arrowText.text = currentArrows.ToString();
     }
 
     public void ShootArrow()
     {
-        CurrentArrows = CurrentArrows - 1;
-        arrowText.text = CurrentArrows.ToString();
+        currentArrows = Mathf.Max(0, currentArrows - 1);
+        arrowText.text = currentArrows.ToString();
     }
     
-    public void ShowMouse(bool value)
+    private void ShowMouse(bool value)
     {
         Cursor.visible = value;
         Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
     }
     
-    void OnEnable()
+    private void OnEnable()
     {
         resumeButton.onClick.AddListener(OnResume);
         quitButton.onClick.AddListener(OnQuit);
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         resumeButton.onClick.RemoveListener(OnResume);
         quitButton.onClick.RemoveListener(OnQuit);
@@ -106,17 +105,17 @@ public class GameManager : MonoBehaviour
     {
         ShowMouse(true);
         Time.timeScale = 0; 
-        PauseMenu.SetActive(true); 
+        pauseMenu.SetActive(true); 
     }
     
-    public void OnResume()
+    private void OnResume()
     {
         ShowMouse(false);
         Time.timeScale = 1;
-        PauseMenu.SetActive(false);
+        pauseMenu.SetActive(false);
     }
 
-    public void OnQuit()
+    private void OnQuit()
     {
         #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
@@ -124,20 +123,24 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
     
-    public void WinFunction()
+    private void WinFunction()
     {
-        if (CurrentButterflies < maxButterflies && currentTime > 0)
+        if (_gameOver) return;
+        if (currentButterflies >= maxButterflies && currentTime > 0)
         {
-            WinScreeen.SetActive(true);
+            winScreen.SetActive(true);
             ShowMouse(true);
-            Time.timeScale = 0; 
+            Time.timeScale = 0;
+            _gameOver = true;
         }
     }
 
-    public void LooseFunction()
+    private void LoseFunction()
     {
-            LooseScreen.SetActive(true);
-            ShowMouse(true);
-            Time.timeScale = 0; 
+        if (_gameOver) return;
+        _gameOver = true;
+        loseScreen.SetActive(true);
+        ShowMouse(true);
+        Time.timeScale = 0; 
     }
 }

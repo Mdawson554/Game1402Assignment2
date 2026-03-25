@@ -5,9 +5,9 @@ using UnityEngine.InputSystem;
 public class MouseBehaviour : MonoBehaviour
 {
     [SerializeField] private float cameraSensitivity;
-    public CinemachineOrbitalFollow GameCamera;
+    [SerializeField] private CinemachineOrbitalFollow gameCamera;
     private float _horizontalMinCameraRange;
-    private float _horizonatalMaxCamerRange;
+    private float _horizontalMaxCameraRange;
     private float _verticalMinCameraRange;
     private float _verticalMaxCameraRange;
     private Vector2 _mouseInput;
@@ -15,31 +15,35 @@ public class MouseBehaviour : MonoBehaviour
     private PlayerController _playerController;
     private PlayerState _currentState;
 
-    void OnEnable()
+    private void OnEnable()
     {
         _playerController = GetComponent<PlayerController>();
         _playerController.OnStateUpdated += StateUpdate;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         _playerController.OnStateUpdated -= StateUpdate;
     }
-    void StateUpdate(PlayerState state)
+    private void StateUpdate(PlayerState state)
     {
         _currentState = state;
+        if (state == PlayerState.EXPLORE)
+        {
+            _mouseInput = Vector2.zero;
+        }
     }
     
-    void Start()
+    private void Start()
     {
-        _horizontalMinCameraRange = GameCamera.HorizontalAxis.Range.x;
-        _horizonatalMaxCamerRange = GameCamera.HorizontalAxis.Range.y;
+        _horizontalMinCameraRange = gameCamera.HorizontalAxis.Range.x;
+        _horizontalMaxCameraRange = gameCamera.HorizontalAxis.Range.y;
         
-        _verticalMinCameraRange =  GameCamera.VerticalAxis.Range.x;
-        _verticalMaxCameraRange = GameCamera.VerticalAxis.Range.y;
+        _verticalMinCameraRange =  gameCamera.VerticalAxis.Range.x;
+        _verticalMaxCameraRange = gameCamera.VerticalAxis.Range.y;
     }
 
-    void Update()
+    private void Update()
     {
         if (_currentState == PlayerState.EXPLORE)
         {
@@ -52,13 +56,13 @@ public class MouseBehaviour : MonoBehaviour
         _mouseInput = value.Get<Vector2>();
     }
     
-    public void CalculateCamera()
+    private void CalculateCamera()
     {
-        GameCamera.HorizontalAxis.Value += _mouseInput.x *  cameraSensitivity * Time.deltaTime; 
-        GameCamera.VerticalAxis.Value += _mouseInput.y *  cameraSensitivity  * Time.deltaTime;
+        gameCamera.HorizontalAxis.Value += _mouseInput.x *  cameraSensitivity * Time.deltaTime; 
+        gameCamera.VerticalAxis.Value += _mouseInput.y *  cameraSensitivity  * Time.deltaTime;
         
-        GameCamera.HorizontalAxis.Value = Mathf.Clamp(GameCamera.HorizontalAxis.Value, _horizontalMinCameraRange, _horizonatalMaxCamerRange);
-        GameCamera.VerticalAxis.Value = Mathf.Clamp(GameCamera.VerticalAxis.Value, _verticalMinCameraRange, _verticalMaxCameraRange);
+        gameCamera.HorizontalAxis.Value = Mathf.Clamp(gameCamera.HorizontalAxis.Value, _horizontalMinCameraRange, _horizontalMaxCameraRange);
+        gameCamera.VerticalAxis.Value = Mathf.Clamp(gameCamera.VerticalAxis.Value, _verticalMinCameraRange, _verticalMaxCameraRange);
     }
     
 }

@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,21 +6,21 @@ using UnityEngine.UI;
 public class LoadScreen : MonoBehaviour
 {
     public string SceneName;
-    [SerializeField] private Button PlayGameButton;
-    [SerializeField] private Button QuitButton;
+    [SerializeField] private Button playGameButton;
+    [SerializeField] private Button quitButton;
 
     void OnEnable()
     {
-        if(PlayGameButton == null ||  QuitButton == null) return;
-        PlayGameButton.onClick.AddListener(OnButtonClicked);
-        QuitButton.onClick.AddListener(OnQuitButtonClicked);
+        if(playGameButton == null ||  quitButton == null) return;
+        playGameButton.onClick.AddListener(OnButtonClicked);
+        quitButton.onClick.AddListener(OnQuitButtonClicked);
     }
 
     void OnDisable()
     {
-        if(PlayGameButton == null ||  QuitButton == null) return;
-        PlayGameButton.onClick.RemoveListener(OnButtonClicked);
-        QuitButton.onClick.RemoveListener(OnQuitButtonClicked);
+        if(playGameButton == null ||  quitButton == null) return;
+        playGameButton.onClick.RemoveListener(OnButtonClicked);
+        quitButton.onClick.RemoveListener(OnQuitButtonClicked);
     }
 
     public void OnButtonClicked()

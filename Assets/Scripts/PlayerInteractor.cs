@@ -18,6 +18,7 @@ public class PlayerInteractor : MonoBehaviour
 
     void OnDisable()
     {
+        interactionInput.Disable();
         interactionInput.performed -= Interact;
     }
 

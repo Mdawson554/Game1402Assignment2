@@ -6,7 +6,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource sfxAudioSource;
     public AudioSource bgAudioSource;
       
-    //null check and functionality to play a one shot audio clip when autorized.
+    //null check and functionality to play a one shot audio clip when authorized.
 
     void Awake()
     {
