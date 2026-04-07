@@ -10,8 +10,8 @@ public class EnemyLineOfSight : MonoBehaviour
     
     private void Update()
     {
-
-        if (Physics.SphereCast( new Ray(sightPosition.position, Vector3.forward) ,sightRadius, out RaycastHit hit, lineOfSight))
+        IsDetected = false;
+        if (Physics.SphereCast( new Ray(sightPosition.position, transform.forward) ,sightRadius, out RaycastHit hit, lineOfSight))
         {
             if (hit.transform.CompareTag("Player"))
             {
@@ -28,6 +28,6 @@ public class EnemyLineOfSight : MonoBehaviour
     {
         Debug.DrawRay(sightPosition.position, transform.TransformDirection(Vector3.forward) * lineOfSight, Color.red);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(new Vector3(sightPosition.position.x, sightPosition.position.y,sightPosition.position.z + lineOfSight) , sightRadius);
+        Gizmos.DrawWireSphere(sightPosition.position + transform.forward * lineOfSight, sightRadius);
     }
 }

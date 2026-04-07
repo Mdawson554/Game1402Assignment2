@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     private AudioManager audioManager;
+    private UIManager uiManager;
     
     [SerializeField] private string sceneName;
     [SerializeField] private int maxTime;
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour
     public float currentTime;
     public int currentArrows;
     public int currentButterflies;
-    private bool _gameOver = false;
+    private bool _gameOver;
     public GameObject pauseMenu;
     public GameObject winScreen;
     public GameObject loseScreen;
@@ -55,31 +56,30 @@ public class GameManager : MonoBehaviour
         if (currentTime <= 0)
         {
             currentTime = 0;
+            UIManager.Instance.UpdateTimerUI(currentTime);
             LoseFunction();
             return;
         }
-        float minutes = Mathf.FloorToInt(currentTime / 60);
-        float seconds = Mathf.FloorToInt(currentTime % 60);
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        UIManager.Instance.UpdateTimerUI(currentTime);
     }
 
     public void CollectButterflies(int butterflyGain)
     {
         currentButterflies += butterflyGain;
-        butterflyText.text = currentButterflies.ToString();
+        UIManager.Instance.UpdateButterflyUI(currentButterflies);
         WinFunction();
     }
     
     public void AddArrowsToInventory() 
     {
         currentArrows = Mathf.Min(currentArrows + arrowPickupAmount, maxArrows);
-        arrowText.text = currentArrows.ToString();
+        UIManager.Instance.UpdateArrowUI(currentArrows);
     }
 
     public void ShootArrow()
     {
         currentArrows = Mathf.Max(0, currentArrows - 1);
-        arrowText.text = currentArrows.ToString();
+        UIManager.Instance.UpdateArrowUI(currentArrows);
     }
     
     private void ShowMouse(bool value)
@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         if (_gameOver) return;
         ShowMouse(true);
         Time.timeScale = 0; 
-        pauseMenu.SetActive(true); 
+        UIManager.Instance.ShowPauseMenu(true);
     }
     
     private void OnResume()
@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
         if (_gameOver) return;
         ShowMouse(false);
         Time.timeScale = 1;
-        pauseMenu.SetActive(false);
+        UIManager.Instance.ShowPauseMenu(false);
     }
 
     private void OnQuit()
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
         if (_gameOver) return;
         if (currentButterflies >= maxButterflies && currentTime > 0)
         {
-            winScreen.SetActive(true);
+            UIManager.Instance.ShowWinScreen();
             ShowMouse(true);
             Time.timeScale = 0;
             _gameOver = true;
@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour
     {
         if (_gameOver) return;
         _gameOver = true;
-        loseScreen.SetActive(true);
+        UIManager.Instance.ShowLoseScreen();
         ShowMouse(true);
         Time.timeScale = 0; 
     }

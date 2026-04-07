@@ -3,18 +3,13 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public abstract class EnemyBehaviour : MonoBehaviour
+public class EnemyBehaviour : MonoBehaviour
 {
-    private EnemyState _currentState;
-
+    private EnemyState _currentState = EnemyState.IDLE;
+    
     [Header("Ranges")] 
-    [SerializeField] protected float patrolRadius;
-    [SerializeField] protected float detectionRange;
     [SerializeField] protected float attackRange;
-    [SerializeField] protected float giveUpDistance;
-    [SerializeField] protected float chaseDistance;
-    [SerializeField] private float chaseCheckAngle;
-
+    
     [Header("Movement")] 
     [SerializeField] protected float walkSpeed;
     [SerializeField] protected float runSpeed;
@@ -27,22 +22,21 @@ public abstract class EnemyBehaviour : MonoBehaviour
     [SerializeField] protected Transform[] patrolTargets;
     [SerializeField] protected Animator enemyAnim;
 
-    protected EnemyLineOfSight enemyLineOfSight;
-    
+    private EnemyLineOfSight enemyLineOfSight;
+    private EnemySenses enemySenses;
     private Transform currentTarget;
     private NavMeshAgent agent;
     private bool _isWaiting;
-    private Vector3 directionToPlayer;
     
     private void Awake()
     {
+        enemySenses = GetComponent<EnemySenses>();
         enemyLineOfSight = GetComponent<EnemyLineOfSight>();
         agent = GetComponent<NavMeshAgent>();
         agent.speed = walkSpeed;
-        agent.SetDestination(playerTarget.position);
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (_currentState == EnemyState.IDLE)
         {
@@ -50,10 +44,10 @@ public abstract class EnemyBehaviour : MonoBehaviour
             
             if (!_isWaiting)
             {
-                StartCoroutine(WaitAndChooseARandomPointAndMove(5));
+                StartCoroutine(WaitAndChooseARandomPointAndMove());
             }
-
-            if (IsPlayerInRange() && IsInFOV())
+            
+            if (enemySenses.IsPlayerInRange() && enemySenses.IsInFOV() && enemyLineOfSight.IsDetected)
             {
                 _currentState = EnemyState.CHASE;
                 enemyAnim.SetBool("Idle", false);
@@ -68,8 +62,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
                 _currentState = EnemyState.IDLE;
                 enemyAnim.SetBool("Walk", false);
             }
-
-            if (IsPlayerInRange() && IsInFOV())
+            if (enemySenses.IsPlayerInRange() && enemySenses.IsInFOV() && enemyLineOfSight.IsDetected)
             {
                 _currentState = EnemyState.CHASE;
                 enemyAnim.SetBool("Walk", false);
@@ -80,7 +73,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
             enemyAnim.SetBool("Chase", true);
             agent.SetDestination(playerTarget.position);
 
-            if (IsPlayerEvaded())
+            if (enemySenses.IsPlayerEvaded())
             {
                 _currentState = EnemyState.IDLE;
                 enemyAnim.SetBool("Chase", false);
@@ -88,7 +81,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
         }
     }
     
-    protected virtual IEnumerator WaitAndChooseARandomPointAndMove(int idleTime)
+    private IEnumerator WaitAndChooseARandomPointAndMove()
     {
         _isWaiting = true;
         Debug.Log("Waiting to choose a random point");
@@ -104,22 +97,5 @@ public abstract class EnemyBehaviour : MonoBehaviour
         if (patrolTargets.Length <= 0) return;
         currentTarget = patrolTargets[Random.Range(0, patrolTargets.Length)];
         agent.SetDestination(currentTarget.position);
-        enemyAnim.SetBool("Walk", false);
-    }
-
-    private bool IsPlayerInRange()
-    {
-        return Vector3.Distance(transform.position, playerTarget.position) <= chaseDistance;
-    }
-
-    private bool IsPlayerEvaded()
-    {
-        return Vector3.Distance(transform.position, playerTarget.position) <= giveUpDistance;
-    }
-    
-    private bool IsInFOV()
-    {
-        directionToPlayer = (playerTarget.position - transform.position).normalized;
-        return Vector3.Angle(transform.forward, directionToPlayer) <= chaseCheckAngle;
     }
 }
