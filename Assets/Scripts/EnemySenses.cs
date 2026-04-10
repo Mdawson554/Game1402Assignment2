@@ -6,7 +6,17 @@ public class EnemySenses : MonoBehaviour
     [SerializeField] private float giveUpDistance;
     [SerializeField] private float chaseCheckAngle;
     [SerializeField] private Transform playerTarget;
+    
+    public bool HasDetectedPlayer { get; private set; }
 
+    private void Update()
+    {
+        if (IsPlayerInRange() && IsInFOV())
+            HasDetectedPlayer = true;
+        else if (IsPlayerEvaded())
+            HasDetectedPlayer = false;
+    }
+    
     public bool IsPlayerInRange()
     {
         return Vector3.Distance(transform.position, playerTarget.position) <= detectionRange;

@@ -34,8 +34,8 @@ public class ChestInteractable : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        GameManager.Instance.AddArrowsToInventory();
-        GameManager.Instance.AddHealthPotionsToInventory();
+        InventoryManager.Instance.AddArrowsToInventory();
+        InventoryManager.Instance.AddHealthPotionsToInventory();
         audioManager.PlaySound(addedToInventory);
         transform.DOScale(0, .5f).SetEase(Ease.InBack).OnComplete(() => { Destroy(gameObject); });
     }

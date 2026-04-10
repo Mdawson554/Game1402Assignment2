@@ -20,7 +20,7 @@ public class ButterfliesInteractable : MonoBehaviour, IInteractable
     
     public void OnInteract()
     {
-        GameManager.Instance.CollectButterflies(butterflyAmount);
+        InventoryManager.Instance.AddButterfliesToInventory(butterflyAmount);
         Debug.Log($"Interacted with {gameObject.name}");
 
         _collectTween = transform.DOScale(0, .5f).SetEase(Ease.InBack).OnComplete(() =>

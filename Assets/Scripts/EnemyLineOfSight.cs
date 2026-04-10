@@ -7,6 +7,7 @@ public class EnemyLineOfSight : MonoBehaviour
     [SerializeField] private float sightRadius;
     [SerializeField] private Transform sightPosition;
     [SerializeField] private LayerMask detectionMask;
+   
     public bool IsDetected;
     
     private void Update()
@@ -16,6 +17,10 @@ public class EnemyLineOfSight : MonoBehaviour
         if (Physics.SphereCast(ray, sightRadius, out RaycastHit hit, lineOfSight, detectionMask))
         {
             IsDetected = hit.transform.CompareTag("Player");
+        }
+        else
+        {
+            IsDetected = false;
         }
     }
 

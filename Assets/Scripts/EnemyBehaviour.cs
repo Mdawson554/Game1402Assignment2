@@ -10,17 +10,13 @@ public abstract class EnemyBehaviour : MonoBehaviour
 {
     private EnemyState _currentState = EnemyState.IDLE;
     
-    [Header("Ranges")] 
-    [SerializeField] protected float attackRange;
-    
     [Header("Movement")] 
     [SerializeField] protected float walkSpeed;
     [SerializeField] protected float runSpeed;
     [SerializeField] protected int minIdleTime;
     [SerializeField] protected int maxIdleTime;
 
-    [Header("Enemy Properties")] 
-    [SerializeField] protected int damage;
+    [Header("Standard Enemy Properties")] 
     [SerializeField] protected Transform playerTarget;
     [SerializeField] protected Transform[] patrolTargets;
     [SerializeField] protected Animator enemyAnim;
@@ -32,6 +28,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
     private Transform currentTarget;
     private bool _isWaiting;
     
+    
     protected virtual void Awake()
     {
         enemySenses = GetComponent<EnemySenses>();
@@ -39,9 +36,8 @@ public abstract class EnemyBehaviour : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.speed = walkSpeed;
     }
-
-
-    protected virtual void FixedUpdate()
+    
+    protected virtual void FixedUpdate() //change over to a switch statement that also handles attack.
     {
         if (_currentState == EnemyState.IDLE)
         {
@@ -66,7 +62,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
                 _currentState = EnemyState.IDLE;
                 enemyAnim.SetBool("Walk", false);
             }
-            if (enemySenses.IsPlayerInRange() && enemySenses.IsInFOV() && enemyLineOfSight.IsDetected)
+            if (CanDetectPlayer())
             {
                 _currentState = EnemyState.CHASE;
                 enemyAnim.SetBool("Walk", false);
@@ -85,8 +81,17 @@ public abstract class EnemyBehaviour : MonoBehaviour
                 enemyAnim.SetBool("Chase", false);
             }
         }
+        else if (_currentState == EnemyState.ATTACK)
+        {
+            agent.SetDestination(playerTarget.position); // keeps the enemy following while attacking
+        }
     }
     
+    
+    public void SetState(EnemyState newState)
+    {
+        _currentState = newState;
+    }
     
     protected virtual IEnumerator WaitAndChooseARandomPointAndMove()
     {
@@ -98,13 +103,13 @@ public abstract class EnemyBehaviour : MonoBehaviour
         _isWaiting = false;
     }
     
-    protected bool CanDetectPlayer()
+    protected virtual bool CanDetectPlayer()
     {
         bool seesDirectly = enemyLineOfSight.IsDetected;
-        bool sensesNearby = enemySenses.IsPlayerInRange() && enemySenses.IsInFOV();
+        bool sensesNearby = enemySenses.HasDetectedPlayer || (enemySenses.IsPlayerInRange() && enemySenses.IsInFOV());
         return seesDirectly || sensesNearby;
     }
-
+    
     protected virtual void ChooseARandomPointAndMove()
     {
         if (patrolTargets.Length <= 0) return;

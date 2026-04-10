@@ -48,7 +48,7 @@ public class Shooter : MonoBehaviour
         {
             return;
         }
-        else if (_canShoot && GameManager.Instance.currentArrows > 0)
+        else if (_canShoot && InventoryManager.Instance.currentArrows > 0)
         {
             //calculate the direction
             Vector3 shootDirection = aimtrack.position - shootPoint.position;

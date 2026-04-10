@@ -54,7 +54,6 @@ public class UIManager : MonoBehaviour
         HealthPotionText.text = currentHealthPotions.ToString();
     }
     
-    
     public void ShowPauseMenu(bool show)   
     {
         pauseMenu.SetActive(show);
