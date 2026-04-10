@@ -3,7 +3,10 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class EnemyBehaviour : MonoBehaviour
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(EnemyLineOfSight))]
+[RequireComponent(typeof(EnemySenses))]
+public abstract class EnemyBehaviour : MonoBehaviour
 {
     private EnemyState _currentState = EnemyState.IDLE;
     
@@ -22,13 +25,14 @@ public class EnemyBehaviour : MonoBehaviour
     [SerializeField] protected Transform[] patrolTargets;
     [SerializeField] protected Animator enemyAnim;
 
-    private EnemyLineOfSight enemyLineOfSight;
-    private EnemySenses enemySenses;
+    protected EnemyLineOfSight enemyLineOfSight;
+    protected EnemySenses enemySenses;
+    protected NavMeshAgent agent;
+
     private Transform currentTarget;
-    private NavMeshAgent agent;
     private bool _isWaiting;
     
-    private void Awake()
+    protected virtual void Awake()
     {
         enemySenses = GetComponent<EnemySenses>();
         enemyLineOfSight = GetComponent<EnemyLineOfSight>();
@@ -36,7 +40,8 @@ public class EnemyBehaviour : MonoBehaviour
         agent.speed = walkSpeed;
     }
 
-    private void FixedUpdate()
+
+    protected virtual void FixedUpdate()
     {
         if (_currentState == EnemyState.IDLE)
         {
@@ -47,13 +52,12 @@ public class EnemyBehaviour : MonoBehaviour
                 StartCoroutine(WaitAndChooseARandomPointAndMove());
             }
             
-            if (enemySenses.IsPlayerInRange() && enemySenses.IsInFOV() && enemyLineOfSight.IsDetected)
+            if (CanDetectPlayer())
             {
                 _currentState = EnemyState.CHASE;
-                enemyAnim.SetBool("Idle", false);
+                enemyAnim.SetBool("Idle", false); 
             }
         }
-
         else if (_currentState == EnemyState.PATROL)
         {
             enemyAnim.SetBool("Walk", true);
@@ -70,29 +74,38 @@ public class EnemyBehaviour : MonoBehaviour
         }
         else if (_currentState == EnemyState.CHASE)
         {
+            agent.speed = runSpeed;
             enemyAnim.SetBool("Chase", true);
             agent.SetDestination(playerTarget.position);
 
             if (enemySenses.IsPlayerEvaded())
             {
+                agent.speed = walkSpeed;
                 _currentState = EnemyState.IDLE;
                 enemyAnim.SetBool("Chase", false);
             }
         }
     }
     
-    private IEnumerator WaitAndChooseARandomPointAndMove()
+    
+    protected virtual IEnumerator WaitAndChooseARandomPointAndMove()
     {
         _isWaiting = true;
-        Debug.Log("Waiting to choose a random point");
         yield return new WaitForSeconds(Random.Range(minIdleTime, maxIdleTime));
         _currentState = EnemyState.PATROL;
         enemyAnim.SetBool("Idle", false);
         ChooseARandomPointAndMove();
         _isWaiting = false;
     }
+    
+    protected bool CanDetectPlayer()
+    {
+        bool seesDirectly = enemyLineOfSight.IsDetected;
+        bool sensesNearby = enemySenses.IsPlayerInRange() && enemySenses.IsInFOV();
+        return seesDirectly || sensesNearby;
+    }
 
-    private void ChooseARandomPointAndMove()
+    protected virtual void ChooseARandomPointAndMove()
     {
         if (patrolTargets.Length <= 0) return;
         currentTarget = patrolTargets[Random.Range(0, patrolTargets.Length)];

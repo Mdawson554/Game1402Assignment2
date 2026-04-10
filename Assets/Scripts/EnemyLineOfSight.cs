@@ -6,28 +6,23 @@ public class EnemyLineOfSight : MonoBehaviour
     [SerializeField] private float lineOfSight;
     [SerializeField] private float sightRadius;
     [SerializeField] private Transform sightPosition;
+    [SerializeField] private LayerMask detectionMask;
     public bool IsDetected;
     
     private void Update()
     {
-        IsDetected = false;
-        if (Physics.SphereCast( new Ray(sightPosition.position, transform.forward) ,sightRadius, out RaycastHit hit, lineOfSight))
+        Ray ray = new Ray(sightPosition.position, transform.forward);
+
+        if (Physics.SphereCast(ray, sightRadius, out RaycastHit hit, lineOfSight, detectionMask))
         {
-            if (hit.transform.CompareTag("Player"))
-            {
-                IsDetected = true;
-            }
-            else 
-            {
-                IsDetected = false;
-            }
+            IsDetected = hit.transform.CompareTag("Player");
         }
     }
 
     private void OnDrawGizmos()
     {
-        Debug.DrawRay(sightPosition.position, transform.TransformDirection(Vector3.forward) * lineOfSight, Color.red);
         Gizmos.color = Color.red;
+        Debug.DrawRay(sightPosition.position, transform.forward * lineOfSight, Color.red);
         Gizmos.DrawWireSphere(sightPosition.position + transform.forward * lineOfSight, sightRadius);
     }
 }

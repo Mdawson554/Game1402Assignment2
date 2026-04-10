@@ -9,7 +9,6 @@ public class ChestInteractable : MonoBehaviour, IInteractable
     [SerializeField] private AudioClip addedToInventory;
     private int isOpenHash;
     private Tween _loopTween;
-
     private AudioManager audioManager;
 
     void Start()
@@ -36,6 +35,7 @@ public class ChestInteractable : MonoBehaviour, IInteractable
     public void OnInteract()
     {
         GameManager.Instance.AddArrowsToInventory();
+        GameManager.Instance.AddHealthPotionsToInventory();
         audioManager.PlaySound(addedToInventory);
         transform.DOScale(0, .5f).SetEase(Ease.InBack).OnComplete(() => { Destroy(gameObject); });
     }
