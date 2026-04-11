@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private int arrowPickupAmount;
     [SerializeField] private int healthPotionPickupAmount;
     [SerializeField] private InputAction usePotionInput;
+    
     public int currentButterflies;
     public int currentArrows;
     public int currentHealthPotions;
@@ -62,7 +63,7 @@ public class InventoryManager : MonoBehaviour
         UIManager.Instance.UpdateHealthPotionUI(currentHealthPotions);
     }
 
-    public void UseHealthPotion(InputAction.CallbackContext context)
+    private void UseHealthPotion(InputAction.CallbackContext context)
     {
         if (currentHealthPotions <= 0) return;
         currentHealthPotions -= 1;

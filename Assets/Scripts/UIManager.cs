@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     private GameManager gameManager;
     
     [SerializeField] private TextMeshProUGUI arrowText;
-    [SerializeField] private TextMeshProUGUI HealthPotionText;
+    [SerializeField] private TextMeshProUGUI healthPotionText;
     [SerializeField] private TextMeshProUGUI butterflyText;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private GameObject pauseMenu;
@@ -16,14 +16,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject loseScreen;
     
     //Hearts
-    public List<GameObject> HeartsUI = new List<GameObject>(); 
-    public GameObject HeartPrefab; 
+    public List<GameObject> heartsUI = new List<GameObject>(); 
+    public GameObject heartPrefab; 
     public GameObject heartSpawner;
     
     
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(this); return; }
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
         Instance = this;
     }
     
@@ -51,7 +54,7 @@ public class UIManager : MonoBehaviour
     
     public void UpdateHealthPotionUI(int currentHealthPotions)
     {
-        HealthPotionText.text = currentHealthPotions.ToString();
+        healthPotionText.text = currentHealthPotions.ToString();
     }
     
     public void ShowPauseMenu(bool show)   
@@ -72,28 +75,28 @@ public class UIManager : MonoBehaviour
 
     public void IncrementHeartSprite(int amount)
     {
-        if (HeartPrefab == null) { Debug.LogError("HeartPrefab is not assigned!"); return; }
+        if (heartPrefab == null) { Debug.LogError("heartPrefab is not assigned!"); return; }
         if (heartSpawner == null) { Debug.LogError("heartSpawner is not assigned!"); return; }
 
         for (int i = 0; i < amount; i++) 
         {
             // parent it immediately, THEN zero the local position
-            var heart = Instantiate(HeartPrefab, heartSpawner.transform);
+            var heart = Instantiate(heartPrefab, heartSpawner.transform);
             heart.transform.localPosition = Vector3.zero;
-            HeartsUI.Add(heart); 
+            heartsUI.Add(heart); 
         }
     }
     
     
     public void DecrementHeartSprite(int amount)
     {
-        amount = Mathf.Min(amount, HeartsUI.Count); 
+        amount = Mathf.Min(amount, heartsUI.Count); 
 
         for (int i = 0; i < amount; i++)
         {
-            int lastIndex = HeartsUI.Count - 1;   
-            Destroy(HeartsUI[lastIndex]);
-            HeartsUI.RemoveAt(lastIndex);
+            int lastIndex = heartsUI.Count - 1;   
+            Destroy(heartsUI[lastIndex]);
+            heartsUI.RemoveAt(lastIndex);
             Debug.Log("Heart decremented");
         }
     }

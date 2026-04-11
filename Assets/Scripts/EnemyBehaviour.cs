@@ -28,7 +28,6 @@ public abstract class EnemyBehaviour : MonoBehaviour
     private Transform currentTarget;
     private bool _isWaiting;
     
-    
     protected virtual void Awake()
     {
         enemySenses = GetComponent<EnemySenses>();
@@ -37,7 +36,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
         agent.speed = walkSpeed;
     }
     
-    protected virtual void FixedUpdate() //change over to a switch statement that also handles attack.
+    protected virtual void FixedUpdate()
     {
         if (_currentState == EnemyState.IDLE)
         {
@@ -83,10 +82,9 @@ public abstract class EnemyBehaviour : MonoBehaviour
         }
         else if (_currentState == EnemyState.ATTACK)
         {
-            agent.SetDestination(playerTarget.position); // keeps the enemy following while attacking
+            agent.SetDestination(playerTarget.position);
         }
     }
-    
     
     public void SetState(EnemyState newState)
     {
@@ -115,5 +113,10 @@ public abstract class EnemyBehaviour : MonoBehaviour
         if (patrolTargets.Length <= 0) return;
         currentTarget = patrolTargets[Random.Range(0, patrolTargets.Length)];
         agent.SetDestination(currentTarget.position);
+    }
+
+    public virtual void EnemyDeath()
+    {
+        
     }
 }

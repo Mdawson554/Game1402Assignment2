@@ -383,6 +383,41 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 330, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &24695071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 24695072}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &24695072
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24695071}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.6063, y: 1.18189, z: 2.18076}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1909323651}
+  - {fileID: 279857742}
+  - {fileID: 2117642197}
+  - {fileID: 1118830011}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &35567254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2947,6 +2982,75 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &279857741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 279857742}
+  - component: {fileID: 279857743}
+  m_Layer: 0
+  m_Name: InventoryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &279857742
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279857741}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -10.60428, y: -1.18187, z: 4.62892}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 24695072}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &279857743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279857741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca90f74944ce2a4ea04bc8df6a37d7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
+  maxButterflies: 3
+  maxArrows: 10
+  maxHealthPotions: 5
+  arrowPickupAmount: 10
+  healthPotionPickupAmount: 1
+  usePotionInput:
+    m_Name: Use Potion Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: ea0c0524-6043-4000-a663-0940da3f2782
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 3c54d259-824e-408f-b96d-23fb5b3c45e3
+      m_Path: <Keyboard>/q
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Use Potion Input
+      m_Flags: 0
+    m_Flags: 0
+  currentButterflies: 0
+  currentArrows: 0
+  currentHealthPotions: 0
 --- !u!1 &282697565
 GameObject:
   m_ObjectHideFlags: 0
@@ -10533,7 +10637,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 1.05
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -10602,7 +10706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTurtle
   walkSpeed: 1
-  runSpeed: 10
+  runSpeed: 3
   minIdleTime: 1
   maxIdleTime: 4
   playerTarget: {fileID: 7312976522951263132}
@@ -11183,14 +11287,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118830009}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6063, y: 1.18189, z: 2.18076}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 276811515}
   - {fileID: 541475420}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 24695072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1119618870
 PrefabInstance:
@@ -15242,7 +15346,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6265206175713501824, guid: 24a0663f813d4beb91fc0c6b1e8fef36, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.148
       objectReference: {fileID: 0}
     - target: {fileID: 6265206175713501824, guid: 24a0663f813d4beb91fc0c6b1e8fef36, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16720,12 +16824,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909323649}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.56548, y: -0, z: -8.49725}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.17178, y: -1.18189, z: -10.678009}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 24695072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1916200861
 PrefabInstance:
@@ -18689,14 +18793,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   arrowText: {fileID: 2011595176}
-  HealthPotionText: {fileID: 1349411870}
+  healthPotionText: {fileID: 1349411870}
   butterflyText: {fileID: 241829329}
   timerText: {fileID: 1238907748}
   pauseMenu: {fileID: 1194441118}
   winScreen: {fileID: 867433844}
   loseScreen: {fileID: 1936479935}
-  HeartsUI: []
-  HeartPrefab: {fileID: 8997714772358021653, guid: 987627023daa05343a45ca3e876c2c45, type: 3}
+  heartsUI: []
+  heartPrefab: {fileID: 8997714772358021653, guid: 987627023daa05343a45ca3e876c2c45, type: 3}
   heartSpawner: {fileID: 2080512300}
 --- !u!4 &2117642197
 Transform:
@@ -18706,12 +18810,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2117642195}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.67823, y: -0.00005, z: 19.38046}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.28453, y: -1.18194, z: 17.199701}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 24695072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2128757679
 PrefabInstance:
@@ -19698,9 +19802,7 @@ SceneRoots:
   - {fileID: 983498599}
   - {fileID: 2025430394}
   - {fileID: 414426962}
-  - {fileID: 1909323651}
-  - {fileID: 1118830011}
-  - {fileID: 2117642197}
+  - {fileID: 24695072}
   - {fileID: 402723594}
   - {fileID: 242041517}
   - {fileID: 696485731}

@@ -8,7 +8,6 @@ public class ChestInteractable : MonoBehaviour, IInteractable
     [SerializeField] private AudioClip chestClose;
     [SerializeField] private AudioClip addedToInventory;
     private int isOpenHash;
-    private Tween _loopTween;
     private AudioManager audioManager;
 
     void Start()

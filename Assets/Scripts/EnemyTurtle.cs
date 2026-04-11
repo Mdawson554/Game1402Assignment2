@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class EnemyTurtle : EnemyBehaviour
@@ -7,10 +8,9 @@ public class EnemyTurtle : EnemyBehaviour
         base.Awake();
     }
 
-    protected override bool CanDetectPlayer()
+    public override void EnemyDeath()
     {
-        bool detected = enemyLineOfSight.IsDetected && enemySenses.IsInFOV();
-        Debug.Log("Turtle can detect player: " + detected);
-        return detected;
+        Debug.Log("Turtle Dies");
+        Destroy(gameObject);
     }
 }
