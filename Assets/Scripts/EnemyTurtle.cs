@@ -3,14 +3,13 @@ using UnityEngine;
 
 public class EnemyTurtle : EnemyBehaviour
 {
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
+    [SerializeField] private AudioClip turtleDeath;
+    private AudioManager audioManager;
+    
     public override void EnemyDeath()
     {
-        Debug.Log("Turtle Dies");
+        audioManager.PlaySound(turtleDeath);
         Destroy(gameObject);
+        Debug.Log("Turtle Dies");
     }
 }
