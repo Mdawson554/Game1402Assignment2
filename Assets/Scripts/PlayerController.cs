@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private float moveSpeedAimed = 2;
 
     [SerializeField] private float rotationSpeedAimed = 10;
+    [SerializeField] private float rotationSpeedAimedVertical = 0.01f;
     [SerializeField] private Transform aimTrack;
     [SerializeField] private float maxAimHeight;
     [SerializeField] private float minAimHeight;
@@ -62,6 +63,9 @@ public class PlayerController : MonoBehaviour
         OnStateUpdated?.Invoke(_currentState);
 
         _defaultAimTrackerPosition = aimTrack.localPosition;
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -152,21 +156,18 @@ public class PlayerController : MonoBehaviour
 
     private void CalculateMovementAim()
     {
-        // rotate the player around the Y axis based on x(horizontal) input
-        transform.Rotate(Vector3.up, rotationSpeedAimed * _lookInput.x * Time.deltaTime);
-
-        // WASD relates to where the player is currently facing
-        // Left/Right goes sideways, forward/back moves along the players facing direction
+        transform.Rotate(Vector3.up, rotationSpeedAimed * _lookInput.x);
+        
         _moveDirection = _moveInput.x * transform.right + _moveInput.y * transform.forward;
 
         _velocity = _velocity.y * Vector3.up + moveSpeedAimed * _moveDirection;
-        _velocity.y += gravity * Time.deltaTime;
+        _velocity.y += gravity;
     }
 
     private void UpdateAimTrack()
     {
         _tempAimTrackerPosition = aimTrack.localPosition;
-        _tempAimTrackerPosition.y -= _lookInput.y * rotationSpeedAimed * Time.deltaTime;
+        _tempAimTrackerPosition.y -= _lookInput.y * rotationSpeedAimedVertical;
         _tempAimTrackerPosition.y = Mathf.Clamp(_tempAimTrackerPosition.y, minAimHeight, maxAimHeight);
         aimTrack.localPosition = _tempAimTrackerPosition;
     }

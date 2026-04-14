@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(EnemyLineOfSight))]
 [RequireComponent(typeof(EnemySenses))]
+[RequireComponent(typeof(EnemyAttack))]
 public abstract class EnemyBehaviour : MonoBehaviour
 {
     private EnemyState _currentState = EnemyState.IDLE;

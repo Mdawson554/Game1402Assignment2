@@ -6,14 +6,9 @@ public class Arrow : MonoBehaviour
     [SerializeField] private float arrowDestroyTime;
     private bool _isDestroying;
     
-    private void OnCollisionEnter(Collision collision) //bottle
+    private void OnCollisionEnter(Collision collision) 
     {
         HandleHit(collision.gameObject);
-    }
-
-    private void OnTriggerEnter(Collider other) //enemy
-    {
-        HandleHit(other.gameObject);
     }
     
     private void HandleHit(GameObject hit)
@@ -23,12 +18,12 @@ public class Arrow : MonoBehaviour
 
         Debug.Log("Hit: " + hit.name);
 
-        var target = hit.GetComponentInParent<ArrowTarget>();
+        var target = hit.GetComponent<ArrowTarget>();
         if (target != null)
         {
             target.DestroyTarget();
         }
-        else if (hit.GetComponentInParent<EnemyBehaviour>() is EnemyBehaviour enemy)
+        else if (hit.GetComponent<EnemyBehaviour>() is EnemyBehaviour enemy)
         {
             enemy.EnemyDeath();
         }

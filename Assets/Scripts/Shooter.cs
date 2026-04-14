@@ -12,6 +12,8 @@ public class Shooter : MonoBehaviour
     [SerializeField] private AudioClip bowRelease;
     [SerializeField] private AudioClip bowLoading;
     [SerializeField] private Transform aimtrack;
+    
+    [SerializeField] private Camera playerCamera;
     private PlayerController _playerController;
     private AudioManager audioManager;
     private bool _canShoot = true;
@@ -50,8 +52,20 @@ public class Shooter : MonoBehaviour
         }
         else if (_canShoot && InventoryManager.Instance.currentArrows > 0)
         {
+            Ray ray =playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+            Vector3 targetPoint;
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+            {
+                targetPoint = hit.point;
+            }
+            else
+            {
+                targetPoint = ray.GetPoint(100f);
+            }
             //calculate the direction
-            Vector3 shootDirection = aimtrack.position - shootPoint.position;
+            Vector3 shootDirection = (targetPoint - shootPoint.position).normalized;
             
             //create a new arrow
             _arrow = Instantiate(shootObject, shootPoint.position, Quaternion.LookRotation(shootDirection));

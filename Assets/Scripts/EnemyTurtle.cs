@@ -8,6 +8,7 @@ public class EnemyTurtle : EnemyBehaviour
     
     public override void EnemyDeath()
     {
+        if (audioManager == null || turtleDeath == null) return;
         audioManager.PlaySound(turtleDeath);
         Debug.Log("Turtle Dies");
         DOTween.Kill(this.gameObject);
