@@ -9,7 +9,7 @@ public class EnemyTurtle : EnemyBehaviour
     public override void EnemyDeath()
     {
         audioManager.PlaySound(turtleDeath);
-        Destroy(gameObject);
         Debug.Log("Turtle Dies");
+        DOTween.Kill(this.gameObject);
     }
 }

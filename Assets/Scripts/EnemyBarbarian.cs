@@ -8,8 +8,9 @@ public class EnemyBarbarian : EnemyBehaviour
     
     public override void EnemyDeath()
     {
-       audioManager.PlaySound(BarbarianDeath);
+        audioManager.PlaySound(BarbarianDeath);
         transform.DOScale(0, .5f).SetEase(Ease.InBack).OnComplete(() => { Destroy(gameObject); });
+        DOTween.Kill(this.gameObject);
         Debug.Log("Barbarian Dies");
     }
 }

@@ -6504,7 +6504,7 @@ Camera:
     height: 1
   near clip plane: 0.82
   far clip plane: 5036
-  field of view: 81.5
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -6530,8 +6530,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584866000}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.035615433, y: -0.000000003722927, z: -1.3267784e-10, w: 0.99936557}
-  m_LocalPosition: {x: -4.9, y: 3.4519987, z: 8.983761}
+  m_LocalRotation: {x: 0.070651, y: -0.20218043, z: 0.014625206, w: 0.9766871}
+  m_LocalPosition: {x: -2.88, y: 2.4499998, z: 12.19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10735,6 +10735,7 @@ GameObject:
   - component: {fileID: 1030724186}
   - component: {fileID: 1030724187}
   - component: {fileID: 1030724188}
+  - component: {fileID: 1030724189}
   m_Layer: 7
   m_Name: EnemyLow
   m_TagString: Untagged
@@ -10874,6 +10875,27 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 1, z: 0.6}
+--- !u!65 &1030724189
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030724181}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.25, y: 1, z: 1.25}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!4 &1056079243 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 530423086720668341, guid: 13b7e8cd7a91041429d22d89f4bc4c4c, type: 3}
