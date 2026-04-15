@@ -6,7 +6,7 @@ public class EnemySenses : MonoBehaviour
     [SerializeField] private float giveUpDistance;
     [SerializeField] private float chaseCheckAngle;
     [SerializeField] private Transform playerTarget;
-    
+
     public bool HasDetectedPlayer { get; private set; }
 
     private void Update()

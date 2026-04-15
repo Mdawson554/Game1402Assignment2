@@ -5,6 +5,11 @@ public class Arrow : MonoBehaviour
 {
     [SerializeField] private float arrowDestroyTime;
     private bool _isDestroying;
+
+    private void Start()
+    {
+        Destroy(gameObject, 10f);
+    }
     
     private void OnCollisionEnter(Collision collision) 
     {
@@ -19,21 +24,28 @@ public class Arrow : MonoBehaviour
         Debug.Log("Hit: " + hit.name);
 
         var target = hit.GetComponent<ArrowTarget>();
+        var enemy = hit.GetComponent<EnemyBehaviour>();
         if (target != null)
         {
             target.DestroyTarget();
         }
-        else if (hit.GetComponent<EnemyBehaviour>() is EnemyBehaviour enemy)
+        if (enemy != null)
         {
+            Debug.Log("Hitting enemy");
             enemy.EnemyDeath();
         }
+        
+        // else if (hit.GetComponent<EnemyBehaviour>() is EnemyBehaviour enemy)
+        // {
+        //     enemy.EnemyDeath();
+        // }
 
-        StartCoroutine(DestroyArrow());
+        //StartCoroutine(DestroyArrow());
     }
 
-    private IEnumerator DestroyArrow()
-    {
-        yield return new WaitForSeconds(arrowDestroyTime);
-        Destroy(gameObject);
-    }
+    // private IEnumerator DestroyArrow()
+    // {
+    //     yield return new WaitForSeconds(arrowDestroyTime);
+    //     Destroy(gameObject);
+    // }
 }
