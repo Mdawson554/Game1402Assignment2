@@ -10,7 +10,7 @@ public class EnemyLineOfSight : MonoBehaviour
    
     public bool IsDetected;
     
-    private void Update()
+    private void FixedUpdate()
     {
         Ray ray = new Ray(sightPosition.position, transform.forward);
 

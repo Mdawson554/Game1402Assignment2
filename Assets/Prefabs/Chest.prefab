@@ -184,7 +184,7 @@ MonoBehaviour:
   anim: {fileID: 4390215643953141983}
   chestOpen: {fileID: 8300000, guid: c59609c2c2c06054783d7ebc59009b02, type: 3}
   chestClose: {fileID: 8300000, guid: 429d538579225ce46b5c6771813cc3c7, type: 3}
-  addedToInventory: {fileID: 8300000, guid: 683c8c2fd70e9524b84248b539c38de8, type: 3}
+  addedToInventory: {fileID: 8300000, guid: dbc94769c93d8c347b8ccc325218cfe5, type: 3}
 --- !u!1 &5671096716361438659
 GameObject:
   m_ObjectHideFlags: 0

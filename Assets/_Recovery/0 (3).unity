@@ -3243,7 +3243,7 @@ MonoBehaviour:
   RecenteringTarget: 2
   HorizontalAxis:
     Value: 0
-    Center: -0
+    Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
     Recentering:
@@ -13785,7 +13785,7 @@ PrefabInstance:
     - target: {fileID: 3901288393302674998, guid: 8d0a3939b982a054e94aee00e1994db4, type: 3}
       propertyPath: addedToInventory
       value: 
-      objectReference: {fileID: 8300000, guid: dbc94769c93d8c347b8ccc325218cfe5, type: 3}
+      objectReference: {fileID: 8300000, guid: 683c8c2fd70e9524b84248b539c38de8, type: 3}
     - target: {fileID: 6437837993188637910, guid: 8d0a3939b982a054e94aee00e1994db4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -15186,7 +15186,7 @@ PrefabInstance:
     - target: {fileID: 3901288393302674998, guid: 8d0a3939b982a054e94aee00e1994db4, type: 3}
       propertyPath: addedToInventory
       value: 
-      objectReference: {fileID: 8300000, guid: dbc94769c93d8c347b8ccc325218cfe5, type: 3}
+      objectReference: {fileID: 8300000, guid: 683c8c2fd70e9524b84248b539c38de8, type: 3}
     - target: {fileID: 6437837993188637910, guid: 8d0a3939b982a054e94aee00e1994db4, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.6982999
