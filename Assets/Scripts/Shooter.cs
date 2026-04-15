@@ -52,7 +52,7 @@ public class Shooter : MonoBehaviour
         }
         else if (_canShoot && InventoryManager.Instance.currentArrows > 0)
         {
-            Ray ray =playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            Ray ray =playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //shoots from the center of the screen instead of a transform 
 
             Vector3 targetPoint;
 
@@ -65,7 +65,7 @@ public class Shooter : MonoBehaviour
                 targetPoint = ray.GetPoint(100f);
             }
             //calculate the direction
-            Vector3 shootDirection = (targetPoint - shootPoint.position).normalized;
+            Vector3 shootDirection = (targetPoint - shootPoint.position).normalized; 
             
             //create a new arrow
             _arrow = Instantiate(shootObject, shootPoint.position, Quaternion.LookRotation(shootDirection));

@@ -8,7 +8,7 @@ public class Arrow : MonoBehaviour
 
     private void Start()
     {
-        Destroy(gameObject, 10f);
+        Destroy(gameObject, 6f);
     }
     
     private void OnCollisionEnter(Collision collision) 

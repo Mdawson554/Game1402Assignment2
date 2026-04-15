@@ -13,7 +13,5 @@ public class EnemyBarbarian : EnemyBehaviour
         Debug.Log("Barbarian Dies");
         audioManager.PlaySound(barbarianDeath);
         transform.DOScale(0, .5f).SetEase(Ease.InBack).OnComplete(() => { Destroy(gameObject); });
-        DOTween.Kill(this.gameObject);
-        Destroy(this.gameObject);
     }
 }
