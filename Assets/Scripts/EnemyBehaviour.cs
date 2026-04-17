@@ -81,59 +81,6 @@ public abstract class EnemyBehaviour : MonoBehaviour
                     agent.SetDestination(playerTarget.position);
                 break;
         }
-        
-        
-        /*if (_currentState == EnemyState.IDLE)
-        {
-            enemyAnim.SetBool("Idle", true);
-            
-            if (!_isWaiting)
-            {
-                StartCoroutine(WaitAndChooseARandomPointAndMove());
-            }
-            
-            if (CanDetectPlayer())
-            {
-                _currentState = EnemyState.CHASE;
-                enemyAnim.SetBool("Idle", false); 
-            }
-        }
-        else if (_currentState == EnemyState.PATROL)
-        {
-            enemyAnim.SetBool("Walk", true);
-            if (agent.remainingDistance <= .2f)
-            {
-                _currentState = EnemyState.IDLE;
-                enemyAnim.SetBool("Walk", false);
-            }
-            if (CanDetectPlayer())
-            {
-                _currentState = EnemyState.CHASE;
-                enemyAnim.SetBool("Walk", false);
-            }
-        }
-        else if (_currentState == EnemyState.CHASE)
-        {
-            agent.speed = runSpeed;
-            enemyAnim.SetBool("Chase", true);
-            agent.SetDestination(playerTarget.position);
-
-            if (enemySenses.IsPlayerEvaded())
-            {
-                agent.speed = walkSpeed;
-                _currentState = EnemyState.IDLE;
-                enemyAnim.SetBool("Chase", false);
-            }
-        }
-        else if (_currentState == EnemyState.ATTACK)
-        {
-            agent.SetDestination(playerTarget.position);
-        }
-        else
-        {
-            Debug.Log("Enemy is Gliding");
-        }
-        */
     }
     
     public void SetState(EnemyState newState)
@@ -144,7 +91,6 @@ public abstract class EnemyBehaviour : MonoBehaviour
         enemyAnim.SetBool("Chase", false);
         
     }
-    
     
     protected virtual IEnumerator WaitAndChooseARandomPointAndMove()
     {

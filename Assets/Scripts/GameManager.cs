@@ -17,11 +17,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button quitButton;
-    
 
     public float currentTime;
     public int currentHealth;
     private bool _gameOver;
+    public bool _isAtMaxHealth;
 
     private void Awake()
     {
@@ -42,6 +42,16 @@ public class GameManager : MonoBehaviour
         currentTime = maxTime;
         ShowMouse(false);
         audioManager.PlayBGMusic();
+        
+        if (currentHealth >= maxHealth)
+        {
+            _isAtMaxHealth = true;
+        }
+        else
+        {
+            _isAtMaxHealth = false;
+        }
+        
     }
 
     private void Update()
@@ -75,14 +85,18 @@ public class GameManager : MonoBehaviour
 
     public void GainHealth()
     {
-        if (currentHealth >= maxHealth) return;
         int actualHeal = Mathf.Min(healthBoostAmount, maxHealth - currentHealth);
         currentHealth += actualHeal;
         uiManager.IncrementHeartSprite(actualHeal);
+        if (currentHealth >= maxHealth)
+        {
+            _isAtMaxHealth = true;
+        }
     }
 
     public void LooseHealth(int damage)
     {
+        _isAtMaxHealth = false;
         currentHealth = Mathf.Max(currentHealth - damage, minHealth);
         uiManager.DecrementHeartSprite(damage);
         if (currentHealth <= minHealth)

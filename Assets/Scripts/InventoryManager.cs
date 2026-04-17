@@ -65,9 +65,10 @@ public class InventoryManager : MonoBehaviour
 
     private void UseHealthPotion(InputAction.CallbackContext context)
     {
-        if (currentHealthPotions <= 0) return;
+        if (currentHealthPotions <= 0 || GameManager.Instance._isAtMaxHealth) return;
         currentHealthPotions -= 1;
         GameManager.Instance.GainHealth();
         UIManager.Instance.UpdateHealthPotionUI(currentHealthPotions); //bug detected with this. the text for the amount still updates upon using it even if health is at max
+        Debug.Log($"Player is at {GameManager.Instance.currentHealth}");
     }
 }
