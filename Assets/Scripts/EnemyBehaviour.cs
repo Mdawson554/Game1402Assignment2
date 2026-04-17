@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -39,7 +40,50 @@ public abstract class EnemyBehaviour : MonoBehaviour
     
     protected virtual void FixedUpdate()
     {
-        if (_currentState == EnemyState.IDLE)
+        switch (_currentState)
+        {
+            case EnemyState.IDLE: 
+                enemyAnim.SetBool("Idle", true);
+                if (!_isWaiting)
+                {
+                    StartCoroutine(WaitAndChooseARandomPointAndMove());
+                }
+            
+                if (CanDetectPlayer())
+                {
+                    SetState(EnemyState.CHASE);
+                }
+                break;
+            case EnemyState.PATROL:
+                enemyAnim.SetBool("Walk", true);
+                if (agent.remainingDistance <= .2f)
+                {
+                    SetState(EnemyState.IDLE);
+                }
+                if (CanDetectPlayer())
+                {
+                    SetState(EnemyState.CHASE);
+                }
+                break;
+            case EnemyState.CHASE:
+                agent.speed = runSpeed;
+               enemyAnim.SetBool("Chase", true);
+                agent.SetDestination(playerTarget.position);
+
+                if (enemySenses.IsPlayerEvaded())
+                {
+                    agent.speed = walkSpeed;
+                    SetState(EnemyState.IDLE);
+                }
+                break;
+            case EnemyState.ATTACK:
+                    SetState(EnemyState.ATTACK);
+                    agent.SetDestination(playerTarget.position);
+                break;
+        }
+        
+        
+        /*if (_currentState == EnemyState.IDLE)
         {
             enemyAnim.SetBool("Idle", true);
             
@@ -85,19 +129,28 @@ public abstract class EnemyBehaviour : MonoBehaviour
         {
             agent.SetDestination(playerTarget.position);
         }
+        else
+        {
+            Debug.Log("Enemy is Gliding");
+        }
+        */
     }
     
     public void SetState(EnemyState newState)
     {
         _currentState = newState;
+        enemyAnim.SetBool("Idle", false);
+        enemyAnim.SetBool("Walk", false);
+        enemyAnim.SetBool("Chase", false);
+        
     }
+    
     
     protected virtual IEnumerator WaitAndChooseARandomPointAndMove()
     {
         _isWaiting = true;
         yield return new WaitForSeconds(Random.Range(minIdleTime, maxIdleTime));
-        _currentState = EnemyState.PATROL;
-        enemyAnim.SetBool("Idle", false);
+        SetState(EnemyState.PATROL);
         ChooseARandomPointAndMove();
         _isWaiting = false;
     }
@@ -112,6 +165,7 @@ public abstract class EnemyBehaviour : MonoBehaviour
     protected virtual void ChooseARandomPointAndMove()
     {
         if (patrolTargets.Length <= 0) return;
+        
         currentTarget = patrolTargets[Random.Range(0, patrolTargets.Length)];
         agent.SetDestination(currentTarget.position);
     }
