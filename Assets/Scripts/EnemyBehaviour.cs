@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,26 +9,26 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(EnemyAttack))]
 public abstract class EnemyBehaviour : MonoBehaviour
 {
-    private EnemyState _currentState = EnemyState.IDLE;
-    
-    [Header("Movement")] 
-    [SerializeField] protected float walkSpeed;
+    [Header("Movement")] [SerializeField] protected float walkSpeed;
+
     [SerializeField] protected float runSpeed;
     [SerializeField] protected int minIdleTime;
     [SerializeField] protected int maxIdleTime;
 
-    [Header("Standard Enemy Properties")] 
-    [SerializeField] protected Transform playerTarget;
+    [Header("Standard Enemy Properties")] [SerializeField]
+    protected Transform playerTarget;
+
     [SerializeField] protected Transform[] patrolTargets;
     [SerializeField] protected Animator enemyAnim;
-
-    protected EnemyLineOfSight enemyLineOfSight;
-    protected EnemySenses enemySenses;
+    private EnemyState _currentState = EnemyState.IDLE;
+    private bool _isWaiting;
     protected NavMeshAgent agent;
 
     private Transform currentTarget;
-    private bool _isWaiting;
-    
+
+    protected EnemyLineOfSight enemyLineOfSight;
+    protected EnemySenses enemySenses;
+
     protected virtual void Awake()
     {
         enemySenses = GetComponent<EnemySenses>();
@@ -37,37 +36,25 @@ public abstract class EnemyBehaviour : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.speed = walkSpeed;
     }
-    
+
     protected virtual void FixedUpdate()
     {
         switch (_currentState)
         {
-            case EnemyState.IDLE: 
+            case EnemyState.IDLE:
                 enemyAnim.SetBool("Idle", true);
-                if (!_isWaiting)
-                {
-                    StartCoroutine(WaitAndChooseARandomPointAndMove());
-                }
-            
-                if (CanDetectPlayer())
-                {
-                    SetState(EnemyState.CHASE);
-                }
+                if (!_isWaiting) StartCoroutine(WaitAndChooseARandomPointAndMove());
+
+                if (CanDetectPlayer()) SetState(EnemyState.CHASE);
                 break;
             case EnemyState.PATROL:
                 enemyAnim.SetBool("Walk", true);
-                if (agent.remainingDistance <= .2f)
-                {
-                    SetState(EnemyState.IDLE);
-                }
-                if (CanDetectPlayer())
-                {
-                    SetState(EnemyState.CHASE);
-                }
+                if (agent.remainingDistance <= .2f) SetState(EnemyState.IDLE);
+                if (CanDetectPlayer()) SetState(EnemyState.CHASE);
                 break;
             case EnemyState.CHASE:
                 agent.speed = runSpeed;
-               enemyAnim.SetBool("Chase", true);
+                enemyAnim.SetBool("Chase", true);
                 agent.SetDestination(playerTarget.position);
 
                 if (enemySenses.IsPlayerEvaded())
@@ -75,23 +62,23 @@ public abstract class EnemyBehaviour : MonoBehaviour
                     agent.speed = walkSpeed;
                     SetState(EnemyState.IDLE);
                 }
+
                 break;
             case EnemyState.ATTACK:
-                    SetState(EnemyState.ATTACK);
-                    agent.SetDestination(playerTarget.position);
+                SetState(EnemyState.ATTACK);
+                agent.SetDestination(playerTarget.position);
                 break;
         }
     }
-    
+
     public void SetState(EnemyState newState)
     {
         _currentState = newState;
         enemyAnim.SetBool("Idle", false);
         enemyAnim.SetBool("Walk", false);
         enemyAnim.SetBool("Chase", false);
-        
     }
-    
+
     protected virtual IEnumerator WaitAndChooseARandomPointAndMove()
     {
         _isWaiting = true;
@@ -100,24 +87,23 @@ public abstract class EnemyBehaviour : MonoBehaviour
         ChooseARandomPointAndMove();
         _isWaiting = false;
     }
-    
+
     protected virtual bool CanDetectPlayer()
     {
-        bool seesDirectly = enemyLineOfSight.IsDetected;
-        bool sensesNearby = enemySenses.HasDetectedPlayer || (enemySenses.IsPlayerInRange() && enemySenses.IsInFOV());
+        var seesDirectly = enemyLineOfSight.IsDetected;
+        var sensesNearby = enemySenses.HasDetectedPlayer || (enemySenses.IsPlayerInRange() && enemySenses.IsInFOV());
         return seesDirectly || sensesNearby;
     }
-    
+
     protected virtual void ChooseARandomPointAndMove()
     {
         if (patrolTargets.Length <= 0) return;
-        
+
         currentTarget = patrolTargets[Random.Range(0, patrolTargets.Length)];
         agent.SetDestination(currentTarget.position);
     }
 
     public virtual void EnemyDeath()
     {
-        
     }
 }

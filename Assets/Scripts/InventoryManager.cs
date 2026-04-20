@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class InventoryManager : MonoBehaviour
 {
-    
     public static InventoryManager Instance;
 
     [SerializeField] private int maxButterflies;
@@ -12,7 +11,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private int arrowPickupAmount;
     [SerializeField] private int healthPotionPickupAmount;
     [SerializeField] private InputAction usePotionInput;
-    
+
     public int currentButterflies;
     public int currentArrows;
     public int currentHealthPotions;
@@ -24,6 +23,7 @@ public class InventoryManager : MonoBehaviour
             Destroy(this);
             return;
         }
+
         Instance = this;
     }
 
@@ -68,7 +68,9 @@ public class InventoryManager : MonoBehaviour
         if (currentHealthPotions <= 0 || GameManager.Instance._isAtMaxHealth) return;
         currentHealthPotions -= 1;
         GameManager.Instance.GainHealth();
-        UIManager.Instance.UpdateHealthPotionUI(currentHealthPotions); //bug detected with this. the text for the amount still updates upon using it even if health is at max
+        UIManager.Instance
+            .UpdateHealthPotionUI(
+                currentHealthPotions); 
         Debug.Log($"Player is at {GameManager.Instance.currentHealth}");
     }
 }

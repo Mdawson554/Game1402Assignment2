@@ -7,14 +7,19 @@ public class ChestInteractable : MonoBehaviour, IInteractable
     [SerializeField] private AudioClip chestOpen;
     [SerializeField] private AudioClip chestClose;
     [SerializeField] private AudioClip addedToInventory;
-    private int isOpenHash;
     private AudioManager audioManager;
+    private int isOpenHash;
 
-    void Start()
+    private void Start()
     {
         if (!anim) return;
         isOpenHash = Animator.StringToHash("IsOpen");
         audioManager = AudioManager.Instance;
+    }
+
+    public void OnDestroy()
+    {
+        DOTween.Kill(gameObject);
     }
 
     public void OnHoverIn()
@@ -37,10 +42,5 @@ public class ChestInteractable : MonoBehaviour, IInteractable
         InventoryManager.Instance.AddHealthPotionsToInventory();
         audioManager.PlaySound(addedToInventory);
         transform.DOScale(0, .5f).SetEase(Ease.InBack).OnComplete(() => { Destroy(gameObject); });
-    }
-
-    public void OnDestroy()
-    {
-        DOTween.Kill(this.gameObject);
     }
 }

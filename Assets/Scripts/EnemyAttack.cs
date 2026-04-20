@@ -5,19 +5,19 @@ public class EnemyAttack : MonoBehaviour
 {
     [SerializeField] private int enemyDamage;
     [SerializeField] private float coolDownTime;
+    private bool _canDamage = true;
 
     private EnemyBehaviour enemyBehaviour;
-    private bool _canDamage = true;
-    
+
     private void Awake()
     {
         enemyBehaviour = GetComponentInParent<EnemyBehaviour>();
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-        enemyBehaviour.SetState(EnemyState.ATTACK); 
+        enemyBehaviour.SetState(EnemyState.ATTACK);
     }
 
     private void OnTriggerExit(Collider other)
@@ -34,11 +34,11 @@ public class EnemyAttack : MonoBehaviour
         StartCoroutine(DamageCooldown());
         GameManager.Instance.LooseHealth(enemyDamage);
     }
- 
+
     private IEnumerator DamageCooldown()
     {
         _canDamage = false;
-        yield return new WaitForSeconds(coolDownTime); 
+        yield return new WaitForSeconds(coolDownTime);
         _canDamage = true;
     }
 }

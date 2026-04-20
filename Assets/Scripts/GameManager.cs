@@ -1,27 +1,27 @@
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    private AudioManager audioManager;
-    private UIManager uiManager;
 
     [SerializeField] private int maxTime;
-    [SerializeField] private int maxButterflies;  
-    [SerializeField] private int minHealth = 0;
-    [SerializeField] private int maxHealth = 0;
-    [SerializeField] private int startingHealth = 0;
-    [SerializeField] private int healthBoostAmount = 0;
+    [SerializeField] private int maxButterflies;
+    [SerializeField] private int minHealth;
+    [SerializeField] private int maxHealth;
+    [SerializeField] private int startingHealth;
+    [SerializeField] private int healthBoostAmount;
 
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button quitButton;
 
     public float currentTime;
     public int currentHealth;
-    private bool _gameOver;
     public bool _isAtMaxHealth;
+    private bool _gameOver;
+    private AudioManager audioManager;
+    private UIManager uiManager;
 
     private void Awake()
     {
@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
             Destroy(this);
             return;
         }
+
         Instance = this;
     }
 
@@ -42,21 +43,28 @@ public class GameManager : MonoBehaviour
         currentTime = maxTime;
         ShowMouse(false);
         audioManager.PlayBGMusic();
-        
+
         if (currentHealth >= maxHealth)
-        {
             _isAtMaxHealth = true;
-        }
         else
-        {
             _isAtMaxHealth = false;
-        }
-        
     }
 
     private void Update()
     {
         DecreaseTimerTime();
+    }
+
+    private void OnEnable()
+    {
+        resumeButton.onClick.AddListener(OnResume);
+        quitButton.onClick.AddListener(OnQuit);
+    }
+
+    private void OnDisable()
+    {
+        resumeButton.onClick.RemoveListener(OnResume);
+        quitButton.onClick.RemoveListener(OnQuit);
     }
 
     private void DecreaseTimerTime()
@@ -69,12 +77,14 @@ public class GameManager : MonoBehaviour
             LoseFunction();
             return;
         }
+
         UIManager.Instance.UpdateTimerUI(currentTime);
     }
 
     public void CheckWinCondition()
     {
-        if (InventoryManager.Instance.currentButterflies >= maxButterflies && currentTime > 0 && currentHealth >= minHealth)
+        if (InventoryManager.Instance.currentButterflies >= maxButterflies && currentTime > 0 &&
+            currentHealth >= minHealth)
         {
             UIManager.Instance.ShowWinScreen();
             ShowMouse(true);
@@ -85,13 +95,10 @@ public class GameManager : MonoBehaviour
 
     public void GainHealth()
     {
-        int actualHeal = Mathf.Min(healthBoostAmount, maxHealth - currentHealth);
+        var actualHeal = Mathf.Min(healthBoostAmount, maxHealth - currentHealth);
         currentHealth += actualHeal;
         uiManager.IncrementHeartSprite(actualHeal);
-        if (currentHealth >= maxHealth)
-        {
-            _isAtMaxHealth = true;
-        }
+        if (currentHealth >= maxHealth) _isAtMaxHealth = true;
     }
 
     public void LooseHealth(int damage)
@@ -121,18 +128,6 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
-    private void OnEnable()
-    {
-        resumeButton.onClick.AddListener(OnResume);
-        quitButton.onClick.AddListener(OnQuit);
-    }
-
-    private void OnDisable()
-    {
-        resumeButton.onClick.RemoveListener(OnResume);
-        quitButton.onClick.RemoveListener(OnQuit);
-    }
-
     public void Pause()
     {
         if (_gameOver) return;
@@ -151,9 +146,9 @@ public class GameManager : MonoBehaviour
 
     private void OnQuit()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         EditorApplication.isPlaying = false;
-        #endif
+#endif
         Application.Quit();
     }
 

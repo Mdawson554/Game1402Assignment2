@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class EnemyLineOfSight : MonoBehaviour
@@ -7,21 +6,17 @@ public class EnemyLineOfSight : MonoBehaviour
     [SerializeField] private float sightRadius;
     [SerializeField] private Transform sightPosition;
     [SerializeField] private LayerMask detectionMask;
-   
+
     public bool IsDetected;
-    
+
     private void FixedUpdate()
     {
-        Ray ray = new Ray(sightPosition.position, transform.forward);
+        var ray = new Ray(sightPosition.position, transform.forward);
 
-        if (Physics.SphereCast(ray, sightRadius, out RaycastHit hit, lineOfSight, detectionMask))
-        {
+        if (Physics.SphereCast(ray, sightRadius, out var hit, lineOfSight, detectionMask))
             IsDetected = hit.transform.CompareTag("Player");
-        }
         else
-        {
             IsDetected = false;
-        }
     }
 
     private void OnDrawGizmos()

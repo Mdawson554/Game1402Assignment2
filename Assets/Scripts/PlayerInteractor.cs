@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,13 +9,13 @@ public class PlayerInteractor : MonoBehaviour
     private IInteractable _interactable;
     private IInteractable _tempInteractable;
 
-    void OnEnable()
+    private void OnEnable()
     {
         interactionInput.Enable();
         interactionInput.performed += Interact;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         interactionInput.Disable();
         interactionInput.performed -= Interact;
@@ -44,5 +43,4 @@ public class PlayerInteractor : MonoBehaviour
         Debug.Log("Interact");
         _interactable?.OnInteract();
     }
-    
 }

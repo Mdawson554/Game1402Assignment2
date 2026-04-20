@@ -1,4 +1,3 @@
-using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -28,9 +27,6 @@ public class CameraSwitcher : MonoBehaviour
             case PlayerState.AIM:
                 aimCamera.Prioritize();
                 break;
-            default:
-                break;
         }
     }
-
 }

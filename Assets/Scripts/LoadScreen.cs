@@ -9,16 +9,16 @@ public class LoadScreen : MonoBehaviour
     [SerializeField] private Button playGameButton;
     [SerializeField] private Button quitButton;
 
-    void OnEnable()
+    private void OnEnable()
     {
-        if(playGameButton == null ||  quitButton == null) return;
+        if (playGameButton == null || quitButton == null) return;
         playGameButton.onClick.AddListener(OnButtonClicked);
         quitButton.onClick.AddListener(OnQuitButtonClicked);
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        if(playGameButton == null ||  quitButton == null) return;
+        if (playGameButton == null || quitButton == null) return;
         playGameButton.onClick.RemoveListener(OnButtonClicked);
         quitButton.onClick.RemoveListener(OnQuitButtonClicked);
     }
@@ -30,9 +30,9 @@ public class LoadScreen : MonoBehaviour
 
     private void OnQuitButtonClicked()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         EditorApplication.isPlaying = false;
-        #endif
+#endif
         Application.Quit();
     }
 }

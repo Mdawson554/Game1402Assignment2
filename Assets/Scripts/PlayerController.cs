@@ -26,36 +26,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private float groundCheckRadius;
     [SerializeField] private LayerMask groundLayer;
-
-    public event Action OnJumpEvent;
-    public event Action<PlayerState> OnStateUpdated;
-
-    private Vector2 _moveInput;
-    private Vector2 _lookInput;
     private Vector3 _camForward;
     private Vector3 _camRight;
-    private Vector3 _moveDirection;
     private CharacterController _characterController;
-    private Quaternion _targetRotation;
-    private Vector3 _velocity;
-    private bool _isGrounded;
-    private Vector3 _defaultAimTrackerPosition;
-    private Vector3 _tempAimTrackerPosition;
 
     private PlayerState _currentState;
+    private Vector3 _defaultAimTrackerPosition;
+    private bool _isGrounded;
+    private Vector2 _lookInput;
+    private Vector3 _moveDirection;
 
-    public bool IsGrounded()
-    {
-        return _isGrounded;
-    }
-
-    public Vector3 GetPlayerVelocity()
-    {
-        return _velocity;
-    }
+    private Vector2 _moveInput;
+    private Quaternion _targetRotation;
+    private Vector3 _tempAimTrackerPosition;
+    private Vector3 _velocity;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
         _characterController = GetComponent<CharacterController>();
         //set the default state
@@ -63,13 +50,13 @@ public class PlayerController : MonoBehaviour
         OnStateUpdated?.Invoke(_currentState);
 
         _defaultAimTrackerPosition = aimTrack.localPosition;
-        
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (_currentState == PlayerState.EXPLORE)
         {
@@ -81,16 +68,37 @@ public class PlayerController : MonoBehaviour
             CalculateMovementAim();
             UpdateAimTrack();
         }
+
         _characterController.Move(_velocity * Time.deltaTime);
     }
 
     private void FixedUpdate()
     {
         CheckGrounded();
-        if (_isGrounded && _velocity.y < 0)
-        {
-            _velocity.y = -0.2f;
-        }
+        if (_isGrounded && _velocity.y < 0) _velocity.y = -0.2f;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.purple;
+        Gizmos.DrawSphere(transform.position + groundCheckOffset, groundCheckRadius);
+        Gizmos.DrawSphere(transform.position + groundCheckOffset + Vector3.down * groundCheckDistance,
+            groundCheckRadius);
+        Gizmos.DrawCube(transform.position + groundCheckOffset + Vector3.down * groundCheckDistance / 2,
+            new Vector3(1.5f * groundCheckRadius, groundCheckDistance, 1.5f * groundCheckRadius));
+    }
+
+    public event Action OnJumpEvent;
+    public event Action<PlayerState> OnStateUpdated;
+
+    public bool IsGrounded()
+    {
+        return _isGrounded;
+    }
+
+    public Vector3 GetPlayerVelocity()
+    {
+        return _velocity;
     }
 
     public void OnMove(InputValue value)
@@ -123,6 +131,7 @@ public class PlayerController : MonoBehaviour
             _camForward.Normalize();
             transform.rotation = Quaternion.LookRotation(_camForward);
         }
+
         OnStateUpdated?.Invoke(_currentState);
     }
 
@@ -151,13 +160,12 @@ public class PlayerController : MonoBehaviour
         //Calculate gravity
         _velocity = _velocity.y * Vector3.up + moveSpeed * _moveDirection;
         _velocity.y += gravity * Time.deltaTime;
-
     }
 
     private void CalculateMovementAim()
     {
         transform.Rotate(Vector3.up, rotationSpeedAimed * _lookInput.x);
-        
+
         _moveDirection = _moveInput.x * transform.right + _moveInput.y * transform.forward;
 
         _velocity = _velocity.y * Vector3.up + moveSpeedAimed * _moveDirection;
@@ -178,19 +186,9 @@ public class PlayerController : MonoBehaviour
             transform.position + groundCheckOffset,
             groundCheckRadius,
             Vector3.down,
-            out RaycastHit hit,
+            out var hit,
             groundCheckDistance,
             groundLayer
         );
     }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.purple;
-        Gizmos.DrawSphere(transform.position + groundCheckOffset, groundCheckRadius);
-        Gizmos.DrawSphere(transform.position + groundCheckOffset + Vector3.down * groundCheckDistance,
-            groundCheckRadius);
-        Gizmos.DrawCube(transform.position + groundCheckOffset + Vector3.down * groundCheckDistance / 2,
-            new Vector3(1.5f * groundCheckRadius, groundCheckDistance, 1.5f * groundCheckRadius));
-    }
-}    
+}

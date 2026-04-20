@@ -16,7 +16,7 @@ public class EnemySenses : MonoBehaviour
         else if (IsPlayerEvaded())
             HasDetectedPlayer = false;
     }
-    
+
     public bool IsPlayerInRange()
     {
         return Vector3.Distance(transform.position, playerTarget.position) <= detectionRange;
@@ -29,7 +29,7 @@ public class EnemySenses : MonoBehaviour
 
     public bool IsInFOV()
     {
-        Vector3 directionToPlayer = (playerTarget.position - transform.position).normalized;
+        var directionToPlayer = (playerTarget.position - transform.position).normalized;
         return Vector3.Angle(transform.forward, directionToPlayer) <= chaseCheckAngle;
     }
 }

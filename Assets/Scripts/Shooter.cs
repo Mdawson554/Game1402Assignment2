@@ -12,14 +12,19 @@ public class Shooter : MonoBehaviour
     [SerializeField] private AudioClip bowRelease;
     [SerializeField] private AudioClip bowLoading;
     [SerializeField] private Transform aimtrack;
-    
+
     [SerializeField] private Camera playerCamera;
+    private GameObject _arrow;
+    private bool _canShoot = true;
+    private PlayerState _currentState;
     private PlayerController _playerController;
     private AudioManager audioManager;
-    private bool _canShoot = true;
-    private GameObject _arrow;
-    private PlayerState _currentState;
-    
+
+    private void Start()
+    {
+        audioManager = AudioManager.Instance;
+    }
+
     private void OnEnable()
     {
         _playerController = GetComponent<PlayerController>();
@@ -28,45 +33,36 @@ public class Shooter : MonoBehaviour
         shootInput.performed += Shoot;
     }
 
-    private void StateUpdate(PlayerState state)
-    {
-        _currentState = state;
-    }
-    
-    private void Start()
-    {
-        audioManager = AudioManager.Instance;
-    }
-
     private void OnDisable()
     {
         _playerController.OnStateUpdated -= StateUpdate;
         shootInput.performed -= Shoot;
     }
 
+    private void StateUpdate(PlayerState state)
+    {
+        _currentState = state;
+    }
+
     private void Shoot(InputAction.CallbackContext context)
     {
         if (_currentState != PlayerState.AIM)
         {
-            return;
         }
         else if (_canShoot && InventoryManager.Instance.currentArrows > 0)
         {
-            Ray ray =playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //shoots from the center of the screen instead of a transform 
+            var ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f,
+                0)); //shoots from the center of the screen instead of a transform 
 
             Vector3 targetPoint;
 
-            if (Physics.Raycast(ray, out RaycastHit hit, 100f))
-            {
+            if (Physics.Raycast(ray, out var hit, 100f))
                 targetPoint = hit.point;
-            }
             else
-            {
                 targetPoint = ray.GetPoint(100f);
-            }
             //calculate the direction
-            Vector3 shootDirection = (targetPoint - shootPoint.position).normalized; 
-            
+            var shootDirection = (targetPoint - shootPoint.position).normalized;
+
             //create a new arrow
             _arrow = Instantiate(shootObject, shootPoint.position, Quaternion.LookRotation(shootDirection));
 
@@ -82,6 +78,6 @@ public class Shooter : MonoBehaviour
     private IEnumerator Reload()
     {
         yield return new WaitForSeconds(reloadTime);
-        _canShoot =  true;
+        _canShoot = true;
     }
 }

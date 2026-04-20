@@ -5,28 +5,26 @@ public class Toast : MonoBehaviour
 {
     public static Toast Instance;
     [SerializeField] private GameObject toastUI;
-    [SerializeField] private TMPro.TextMeshProUGUI toastText;
-    
+    [SerializeField] private TextMeshProUGUI toastText;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
+    private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
+        if (Instance != null && Instance != this) Destroy(this);
         Instance = this;
     }
-    void Start()
+
+    private void Start()
     {
         toastUI.SetActive(false);
     }
-    
+
     public void ShowToast(string textValue)
     {
         toastUI.SetActive(true);
         toastText.SetText(textValue);
     }
-    
+
     public void HideToast()
     {
         toastUI.SetActive(false);

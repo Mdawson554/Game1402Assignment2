@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class Arrow : MonoBehaviour
@@ -10,12 +9,12 @@ public class Arrow : MonoBehaviour
     {
         Destroy(gameObject, 6f);
     }
-    
-    private void OnCollisionEnter(Collision collision) 
+
+    private void OnCollisionEnter(Collision collision)
     {
         HandleHit(collision.gameObject);
     }
-    
+
     private void HandleHit(GameObject hit)
     {
         if (_isDestroying) return;
@@ -25,27 +24,11 @@ public class Arrow : MonoBehaviour
 
         var target = hit.GetComponent<ArrowTarget>();
         var enemy = hit.GetComponent<EnemyBehaviour>();
-        if (target != null)
-        {
-            target.DestroyTarget();
-        }
+        if (target != null) target.DestroyTarget();
         if (enemy != null)
         {
             Debug.Log("Hitting enemy");
             enemy.EnemyDeath();
         }
-        
-        // else if (hit.GetComponent<EnemyBehaviour>() is EnemyBehaviour enemy)
-        // {
-        //     enemy.EnemyDeath();
-        // }
-
-        //StartCoroutine(DestroyArrow());
     }
-
-    // private IEnumerator DestroyArrow()
-    // {
-    //     yield return new WaitForSeconds(arrowDestroyTime);
-    //     Destroy(gameObject);
-    // }
 }

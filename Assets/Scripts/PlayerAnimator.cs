@@ -4,10 +4,10 @@ public class PlayerAnimator : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Animator anim;
-    
-    Vector3 _playerVelocity;
-    
-    void Update()
+
+    private Vector3 _playerVelocity;
+
+    private void Update()
     {
         anim.SetBool("IsGrounded", playerController.IsGrounded());
         _playerVelocity += playerController.GetPlayerVelocity();
@@ -15,12 +15,12 @@ public class PlayerAnimator : MonoBehaviour
         anim.SetFloat("Velocity", playerController.GetPlayerVelocity().sqrMagnitude);
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         playerController.OnJumpEvent += OnJump;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         playerController.OnJumpEvent -= OnJump;
     }
